@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixtureFlow v2 — Brand Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ─── TOKENS ─────────────────────────────────────────────────── */
+    :root {
+      --page-bg:        #f0f2f5;
+      --card:           #ffffff;
+      --border:         #e8eaef;
+      --border-strong:  #d1d5de;
+      --hover-bg:       #f5f6f9;
+
+      --fg:             #111827;
+      --fg-muted:       #6b7280;
+      --fg-faint:       #9ca3af;
+
+      --accent:         #e84422;
+      --accent-hover:   #d13a1c;
+      --accent-dim:     rgba(232, 68, 34, 0.07);
+
+      --win:            #16a34a;
+      --draw:           #d97706;
+      --loss:           #dc2626;
+
+      --blue-dim:       rgba(59, 130, 246, 0.10);
+      --blue-icon:      #3b82f6;
+      --amber-dim:      rgba(245, 158, 11, 0.10);
+      --amber-icon:     #f59e0b;
+      --emerald-dim:    rgba(16, 185, 129, 0.10);
+      --emerald-icon:   #10b981;
+      --violet-dim:     rgba(139, 92, 246, 0.10);
+      --violet-icon:    #8b5cf6;
+      --red-dim:        rgba(232, 68, 34, 0.10);
+
+      --font-brand: 'Anton', system-ui, sans-serif;
+      --font-body:  'Barlow', system-ui, sans-serif;
+      --font-mono:  'JetBrains Mono', monospace;
+
+      --radius-sm:  4px;
+      --radius:     8px;
+      --radius-md:  12px;
+      --radius-xl:  22px;
+
+      --shadow-app: 0 8px 32px rgba(0,0,0,0.09), 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-card:0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    body {
+      background: var(--page-bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 20px 48px;
+    }
+
+    svg { display: block; }
+
+    /* ─── PAGE WRAPPER ────────────────────────────────────────────── */
+    .page-wrap {
+      width: 100%;
+      max-width: 1240px;
+    }
+    .page-label {
+      text-align: center;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--fg-faint);
+      margin-bottom: 18px;
+    }
+
+    /* ─── APP SHELL ───────────────────────────────────────────────── */
+    .app-shell {
+      display: flex;
+      width: 100%;
+      min-height: calc(100vh - 96px);
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-app);
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SIDEBAR
+    ═══════════════════════════════════════════════════════════════ */
+    .sidebar {
+      width: 264px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      background: var(--card);
+      /* Full height is guaranteed by the flex parent */
+    }
+
+    /* ── Sidebar Header: Whitelabel club branding ── */
+    .sidebar-header {
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .club-info {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+    .club-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-brand);
+      font-size: 0.75rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .club-text .club-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--fg);
+      line-height: 1.25;
+    }
+    .club-text .club-role {
+      font-size: 0.6875rem;
+      color: var(--fg-muted);
+      margin-top: 2px;
+    }
+    .sidebar-header-action {
+      color: var(--fg-faint);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ── Sidebar Season Stat (prominent, like "Earning" in ref) ── */
+    .sidebar-season {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .sidebar-season-label {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-muted);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .sidebar-season-value {
+      font-family: var(--font-mono);
+      font-size: 1.625rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1;
+    }
+    .sidebar-season-sub {
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    /* ── Nav ── */
+    .sidebar-nav {
+      flex: 1;
+      padding: 10px 0;
+      overflow-y: auto;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--fg-muted);
+      text-decoration: none;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: color 0.12s, background 0.12s;
+    }
+    .nav-item:hover {
+      color: var(--fg);
+      background: var(--hover-bg);
+    }
+    .nav-item.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-dim);
+      font-weight: 600;
+    }
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+    .nav-item.active .nav-icon { opacity: 1; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.625rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+
+    /* ── Sidebar Footer ── */
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 0;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN AREA
+    ═══════════════════════════════════════════════════════════════ */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    .topbar-title { flex-shrink: 0; }
+    .topbar-title h1 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--fg);
+      line-height: 1;
+    }
+    .topbar-title p {
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+      margin-top: 3px;
+    }
+
+    /* Search — pill style matching reference */
+    .topbar-search {
+      flex: 1;
+      max-width: 340px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f4f5f8;
+      border: 1.5px solid transparent;
+      border-radius: 999px;
+      padding: 7px 14px;
+      color: var(--fg-muted);
+      font-size: 0.8125rem;
+      font-family: var(--font-body);
+      cursor: text;
+    }
+
+    /* FixtureFlow brand wordmark — main topbar right */
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-wordmark {
+      font-family: var(--font-brand);
+      font-size: 1.125rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      user-select: none;
+      line-height: 1;
+    }
+    .brand-wordmark .w-fixture { color: var(--fg); }
+    .brand-wordmark .w-flow    { color: var(--accent); }
+
+    .topbar-view-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--fg-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      padding: 0;
+    }
+    .topbar-view-btn:hover { color: var(--fg); }
+
+    /* ── Content area ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+    }
+
+    /* ─── 3-column content grid (matches reference layout) ─────── */
+    /* Col 1: Upcoming Schedule | Col 2: Season Record | Col 3: Stats (spans 2 rows) */
+    /* Row 2: Fixtures table (spans col 1+2) | Col 3 continues                       */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.68fr 252px;
+      grid-template-rows: auto auto;
+      gap: 20px;
+      align-items: start;
+    }
+    .cg-schedule { grid-column: 1; grid-row: 1; }
+    .cg-record   { grid-column: 2; grid-row: 1; }
+    .cg-right    { grid-column: 3; grid-row: 1 / 3; } /* spans both rows */
+    .cg-table    { grid-column: 1 / 3; grid-row: 2; }
+
+    /* ─── CARD COMMON ─────────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-header h3 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .card-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+    }
+    .card-link {
+      font-size: 0.8125rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .card-body { padding: 0 16px; }
+
+    /* ─── SCHEDULE CARD (top left) ────────────────────────────────── */
+    .schedule-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .schedule-row:last-child { border-bottom: none; }
+    .schedule-row:hover { background: var(--hover-bg); margin: 0 -16px; padding: 11px 16px; }
+
+    .date-badge {
+      flex-shrink: 0;
+      width: 40px;
+      text-align: center;
+    }
+    .date-badge .day {
+      font-family: var(--font-mono);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1;
+    }
+    .date-badge .month {
+      font-size: 0.5625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--fg-muted);
+      margin-top: 2px;
+    }
+    .date-divider {
+      width: 1px;
+      height: 30px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .match-info { flex: 1; min-width: 0; }
+    .match-info .teams {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--fg);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .match-info .meta {
+      font-size: 0.6875rem;
+      color: var(--fg-muted);
+      margin-top: 2px;
+    }
+    .tournament-tag {
+      flex-shrink: 0;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      background: #f4f5f8;
+      color: var(--fg-muted);
+    }
+
+    /* ─── SEASON RECORD CARD (top center) ─────────────────────────── */
+    .record-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px 16px;
+    }
+
+    /* CSS donut chart */
+    .donut-wrap {
+      position: relative;
+      width: 128px;
+      height: 128px;
+      margin-bottom: 18px;
+    }
+    .donut-ring {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      /* 21 wins (55%), 6 draws (16%), 11 losses (29%) of 38 matches */
+      background: conic-gradient(
+        var(--win)  0%   55%,
+        var(--draw) 55%  71%,
+        var(--loss) 71%  100%
+      );
+    }
+    .donut-hole {
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-hole .d-value {
+      font-family: var(--font-mono);
+      font-size: 1.375rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1;
+    }
+    .donut-hole .d-label {
+      font-size: 0.5625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--fg-muted);
+      margin-top: 3px;
+    }
+
+    /* Legend */
+    .record-legend {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+    }
+    .legend-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--fg-muted);
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-val {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    /* ─── RIGHT COLUMN ────────────────────────────────────────────── */
+    .right-col-section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .right-col-section-title h3 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .right-col-section-title span {
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Stat mini cards (matching the "Statics" panel in reference) */
+    .stat-mini {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 13px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 0.12s;
+    }
+    .stat-mini:last-of-type { margin-bottom: 0; }
+    .stat-mini:hover { border-color: rgba(232,68,34,0.22); }
+    .sm-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sm-body { flex: 1; }
+    .sm-label {
+      font-size: 0.6875rem;
+      color: var(--fg-muted);
+      font-weight: 500;
+    }
+    .sm-value {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.2;
+    }
+    .sm-change {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .up   { color: var(--win); }
+    .down { color: var(--loss); }
+
+    /* Recent Results (below stat cards) */
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-teams { font-weight: 500; color: var(--fg); }
+    .result-vs { color: var(--fg-muted); font-weight: 400; margin: 0 4px; font-size: 0.75rem; }
+    .result-score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    /* ─── FIXTURES TABLE (bottom, spans 2 cols) ───────────────────── */
+    .fixtures-table { width: 100%; border-collapse: collapse; }
+    .fixtures-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--fg-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .fixtures-table td {
+      padding: 11px 14px;
+      font-size: 0.8125rem;
+      color: var(--fg);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .fixtures-table tbody tr { cursor: pointer; transition: background 0.1s; }
+    .fixtures-table tbody tr:hover { background: #f8f9fb; }
+    .fixtures-table tbody tr:last-child td { border-bottom: none; }
+
+    .match-id {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+    }
+    .match-id.highlight { color: var(--accent); }
+    .fixture-date-col {
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+    }
+    .teams-col { font-weight: 600; }
+    .vs-inline {
+      color: var(--fg-muted);
+      font-weight: 400;
+      font-size: 0.75rem;
+      margin: 0 5px;
+    }
+    .tourn-col { font-size: 0.75rem; color: var(--fg-muted); }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+    }
+    .status-scheduled {
+      background: #f4f5f8;
+      color: var(--fg-muted);
+    }
+    .status-live {
+      background: var(--red-dim);
+      color: var(--accent);
+      border: 1px solid rgba(232,68,34,0.3);
+    }
+    .status-live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .table-action {
+      opacity: 0;
+      transition: opacity 0.1s;
+      color: var(--fg-muted);
+      font-size: 0.75rem;
+    }
+    .fixtures-table tbody tr:hover .table-action { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <p class="page-label">FixtureFlow v2 — Dashboard Preview</p>
+
+  <div class="app-shell">
+
+    <!-- ═══════════════════════════════════════════════
+         SIDEBAR — whitelabel club branding
+    ═══════════════════════════════════════════════ -->
+    <aside class="sidebar">
+
+      <!-- Header: Whitelabel club identity -->
+      <div class="sidebar-header">
+        <div class="club-info">
+          <div class="club-badge">FC</div>
+          <div class="club-text">
+            <div class="club-name">Your Club FC</div>
+            <div class="club-role">Admin dashboard</div>
+          </div>
+        </div>
+        <div class="sidebar-header-action">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Prominent season info (like "Earning" section in reference) -->
+      <div class="sidebar-season">
+        <div class="sidebar-season-label">Current Season</div>
+        <div class="sidebar-season-value">2024/25</div>
+        <div class="sidebar-season-sub">Spring Cup · League A · League B</div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+
+        <a class="nav-item active" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          Dashboard
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Age Groups
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Teams
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          Players
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+          </svg>
+          Tournaments
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Fixtures
+          <span class="nav-badge">3</span>
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          Statistics
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.2 15a1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.6 9.2a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 7.9 4.9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9.2a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Settings
+        </a>
+
+        <a class="nav-item" href="#">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Users
+        </a>
+
+      </nav>
+
+      <!-- Footer -->
+      <div class="sidebar-footer">
+        <a class="nav-item" href="#" style="color:var(--fg-muted)">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sign out
+        </a>
+      </div>
+
+    </aside>
+    <!-- /sidebar -->
+
+    <!-- ═══════════════════════════════════════════════
+         MAIN AREA
+    ═══════════════════════════════════════════════ -->
+    <div class="main">
+
+      <!-- Topbar: title left · search center · FixtureFlow brand right -->
+      <header class="topbar">
+
+        <div class="topbar-title">
+          <h1>Dashboard</h1>
+          <p>Overview of your club</p>
+        </div>
+
+        <div class="topbar-search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Search anything...
+        </div>
+
+        <div class="topbar-right">
+          <!-- FixtureFlow brand wordmark — right side of main header -->
+          <div class="brand-wordmark">
+            <span class="w-fixture">Fixture</span><span class="w-flow">Flow</span>
+          </div>
+          <button class="topbar-view-btn">
+            View public site
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </button>
+        </div>
+
+      </header>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="content-grid">
+
+          <!-- ── COL 1, ROW 1: Upcoming Schedule ───────────────── -->
+          <div class="cg-schedule card">
+            <div class="card-header">
+              <h3>Upcoming Schedule</h3>
+              <div class="card-header-meta">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                Apr 12 – Apr 19, 2025
+                <a href="#" class="card-link" style="margin-left:10px">View all →</a>
+              </div>
+            </div>
+            <div class="card-body">
+
+              <div class="schedule-row">
+                <div class="date-badge">
+                  <div class="day">12</div>
+                  <div class="month">APR</div>
+                </div>
+                <div class="date-divider"></div>
+                <div class="match-info">
+                  <div class="teams">Rangers U16 vs City FC U16</div>
+                  <div class="meta">10:00 · Riverside Ground</div>
+                </div>
+                <span class="tournament-tag">Spring Cup</span>
+              </div>
+
+              <div class="schedule-row">
+                <div class="date-badge">
+                  <div class="day">13</div>
+                  <div class="month">APR</div>
+                </div>
+                <div class="date-divider"></div>
+                <div class="match-info">
+                  <div class="teams">Lions U14 vs Eagles Academy</div>
+                  <div class="meta">11:30 · North Pitch</div>
+                </div>
+                <span class="tournament-tag">League A</span>
+              </div>
+
+              <div class="schedule-row">
+                <div class="date-badge">
+                  <div class="day">15</div>
+                  <div class="month">APR</div>
+                </div>
+                <div class="date-divider"></div>
+                <div class="match-info">
+                  <div class="teams">Tigers U18 vs Phoenix Youth</div>
+                  <div class="meta">14:00 · Main Ground</div>
+                </div>
+                <span class="tournament-tag">Spring Cup</span>
+              </div>
+
+              <div class="schedule-row">
+                <div class="date-badge">
+                  <div class="day">16</div>
+                  <div class="month">APR</div>
+                </div>
+                <div class="date-divider"></div>
+                <div class="match-info">
+                  <div class="teams">Rovers U12 vs Sharks FC</div>
+                  <div class="meta">09:30 · East Pitch</div>
+                </div>
+                <span class="tournament-tag">League B</span>
+              </div>
+
+              <div class="schedule-row">
+                <div class="date-badge">
+                  <div class="day">19</div>
+                  <div class="month">APR</div>
+                </div>
+                <div class="date-divider"></div>
+                <div class="match-info">
+                  <div class="teams">Hawks U16 vs Storm United</div>
+                  <div class="meta">13:00 · Riverside Ground</div>
+                </div>
+                <span class="tournament-tag">League A</span>
+              </div>
+
+            </div>
+          </div>
+          <!-- /schedule -->
+
+          <!-- ── COL 2, ROW 1: Season Record (donut) ──────────── -->
+          <div class="cg-record card">
+            <div class="card-header">
+              <h3>Season Record</h3>
+            </div>
+            <div class="record-body">
+              <div class="donut-wrap">
+                <div class="donut-ring"></div>
+                <div class="donut-hole">
+                  <div class="d-value">38</div>
+                  <div class="d-label">Matches</div>
+                </div>
+              </div>
+              <div class="record-legend">
+                <div class="legend-row">
+                  <div class="legend-left">
+                    <div class="legend-dot" style="background:var(--win)"></div>
+                    Wins
+                  </div>
+                  <div class="legend-val">21</div>
+                </div>
+                <div class="legend-row">
+                  <div class="legend-left">
+                    <div class="legend-dot" style="background:var(--draw)"></div>
+                    Draws
+                  </div>
+                  <div class="legend-val">6</div>
+                </div>
+                <div class="legend-row">
+                  <div class="legend-left">
+                    <div class="legend-dot" style="background:var(--loss)"></div>
+                    Losses
+                  </div>
+                  <div class="legend-val">11</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /record -->
+
+          <!-- ── COL 3, ROWS 1+2: Stats + Recent Results ──────── -->
+          <div class="cg-right">
+
+            <!-- Statics section header -->
+            <div class="right-col-section-title">
+              <h3>Statics</h3>
+              <span>
+                This season
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </span>
+            </div>
+
+            <!-- Three colored stat mini-cards -->
+            <div class="stat-mini">
+              <div class="sm-icon" style="background:var(--blue-dim);color:var(--blue-icon)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <div class="sm-body">
+                <div class="sm-label">Teams</div>
+                <div class="sm-value">12</div>
+              </div>
+              <div class="sm-change up">↑ 12.5%</div>
+            </div>
+
+            <div class="stat-mini">
+              <div class="sm-icon" style="background:var(--amber-dim);color:var(--amber-icon)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div class="sm-body">
+                <div class="sm-label">Players</div>
+                <div class="sm-value">248</div>
+              </div>
+              <div class="sm-change up">↑ 7.1%</div>
+            </div>
+
+            <div class="stat-mini">
+              <div class="sm-icon" style="background:var(--emerald-dim);color:var(--emerald-icon)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+                </svg>
+              </div>
+              <div class="sm-body">
+                <div class="sm-label">Tournaments</div>
+                <div class="sm-value">4</div>
+              </div>
+              <div class="sm-change down">↓ 0.32%</div>
+            </div>
+
+            <!-- Recent Results widget -->
+            <div class="card" style="margin-top:20px;">
+              <div class="card-header">
+                <h3>Recent Results</h3>
+              </div>
+              <div>
+                <div class="result-row">
+                  <span class="result-teams">Rangers <span class="result-vs">vs</span> Lions</span>
+                  <span class="result-score" style="color:var(--win)">2 – 1</span>
+                </div>
+                <div class="result-row">
+                  <span class="result-teams">Eagles <span class="result-vs">vs</span> Tigers</span>
+                  <span class="result-score" style="color:var(--draw)">1 – 1</span>
+                </div>
+                <div class="result-row">
+                  <span class="result-teams">Sharks <span class="result-vs">vs</span> Hawks</span>
+                  <span class="result-score" style="color:var(--win)">3 – 0</span>
+                </div>
+                <div class="result-row">
+                  <span class="result-teams">Phoenix <span class="result-vs">vs</span> Storm</span>
+                  <span class="result-score" style="color:var(--loss)">0 – 2</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- /right col -->
+
+          <!-- ── COLS 1+2, ROW 2: Upcoming Fixtures Table ─────── -->
+          <div class="cg-table card">
+            <div class="card-header">
+              <h3>Upcoming Fixtures</h3>
+              <a href="#" class="card-link">View Full Schedule →</a>
+            </div>
+            <table class="fixtures-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Match</th>
+                  <th>Tournament</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="match-id">#M580</span></td>
+                  <td><span class="fixture-date-col">12 Apr 2025</span></td>
+                  <td class="teams-col">Rangers U16 <span class="vs-inline">vs</span> City FC U16</td>
+                  <td class="tourn-col">Spring Cup</td>
+                  <td><span class="status-pill status-live"><span class="status-live-dot"></span>Live</span></td>
+                  <td class="table-action">···</td>
+                </tr>
+                <tr>
+                  <td><span class="match-id highlight">#M581</span></td>
+                  <td><span class="fixture-date-col">13 Apr 2025</span></td>
+                  <td class="teams-col">Lions U14 <span class="vs-inline">vs</span> Eagles Academy</td>
+                  <td class="tourn-col">League A</td>
+                  <td><span class="status-pill status-scheduled">Scheduled</span></td>
+                  <td class="table-action">···</td>
+                </tr>
+                <tr>
+                  <td><span class="match-id">#M582</span></td>
+                  <td><span class="fixture-date-col">15 Apr 2025</span></td>
+                  <td class="teams-col">Tigers U18 <span class="vs-inline">vs</span> Phoenix Youth</td>
+                  <td class="tourn-col">Spring Cup</td>
+                  <td><span class="status-pill status-scheduled">Scheduled</span></td>
+                  <td class="table-action">···</td>
+                </tr>
+                <tr>
+                  <td><span class="match-id">#M583</span></td>
+                  <td><span class="fixture-date-col">16 Apr 2025</span></td>
+                  <td class="teams-col">Rovers U12 <span class="vs-inline">vs</span> Sharks FC</td>
+                  <td class="tourn-col">League B</td>
+                  <td><span class="status-pill status-scheduled">Scheduled</span></td>
+                  <td class="table-action">···</td>
+                </tr>
+                <tr>
+                  <td><span class="match-id">#M584</span></td>
+                  <td><span class="fixture-date-col">19 Apr 2025</span></td>
+                  <td class="teams-col">Hawks U16 <span class="vs-inline">vs</span> Storm United</td>
+                  <td class="tourn-col">League A</td>
+                  <td><span class="status-pill status-scheduled">Scheduled</span></td>
+                  <td class="table-action">···</td>
+                </tr>
+                <tr>
+                  <td><span class="match-id">#M585</span></td>
+                  <td><span class="fixture-date-col">20 Apr 2025</span></td>
+                  <td class="teams-col">City FC U12 <span class="vs-inline">vs</span> Riverside Jrs</td>
+                  <td class="tourn-col">League B</td>
+                  <td><span class="status-pill status-scheduled">Scheduled</span></td>
+                  <td class="table-action">···</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- /table -->
+
+        </div>
+        <!-- /content-grid -->
+      </div>
+      <!-- /content -->
+
+    </div>
+    <!-- /main -->
+
+  </div>
+  <!-- /app-shell -->
+
+</div>
+
+</body>
+</html>

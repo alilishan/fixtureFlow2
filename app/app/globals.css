@@ -1,0 +1,247 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    /* Fonts */
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-display: "Anton", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    /* Radius — rounded, modern */
+    --radius-sm: 0.375rem;
+    --radius: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+
+    /* Colour tokens wired to CSS vars */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-ring: var(--ring);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    /* Sport tokens */
+    --color-win: var(--win);
+    --color-draw: var(--draw);
+    --color-loss: var(--loss);
+    --color-live: var(--live);
+}
+
+/* ─── LIGHT THEME ──────────────────────────────────────────── */
+:root {
+    /* Page background — cool light gray, not pure white */
+    --background: #f0f1f5;
+    --foreground: #111827;
+
+    /* Cards and surfaces — pure white */
+    --card: #ffffff;
+    --card-foreground: #111827;
+    --popover: #ffffff;
+    --popover-foreground: #111827;
+
+    /* Primary — brand red, unchanged */
+    --primary: #e84422;
+    --primary-foreground: #ffffff;
+    --primary-hover: #d13a1c;
+
+    --secondary: #f4f5f8;
+    --secondary-foreground: #111827;
+    --muted: #f4f5f8;
+    --muted-foreground: #8b91a7;
+
+    --accent: #e84422;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+
+    --border: #e5e7ef;
+    --border-strong: #cdd0de;
+    --input: #f4f5f8;
+    --ring: #e84422;
+
+    /* Elevation */
+    --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.04);
+    --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.06), 0 1px 2px rgba(17, 24, 39, 0.04);
+    --shadow: 0 4px 6px -1px rgba(17, 24, 39, 0.07), 0 2px 4px -1px rgba(17, 24, 39, 0.04);
+    --shadow-md: 0 10px 15px -3px rgba(17, 24, 39, 0.08), 0 4px 6px -2px rgba(17, 24, 39, 0.04);
+    --shadow-lg: 0 20px 25px -5px rgba(17, 24, 39, 0.1), 0 10px 10px -5px rgba(17, 24, 39, 0.04);
+
+    /* Sport status */
+    --win: #16a34a;
+    --draw: #d97706;
+    --loss: #dc2626;
+    --live: #e84422;
+}
+
+/* ─── DARK THEME ───────────────────────────────────────────── */
+.dark {
+    /* Page background */
+    --background: #0e0f14;
+    --foreground: #e8eaf0;
+
+    /* Cards — elevated dark surface */
+    --card: #16181f;
+    --card-foreground: #e8eaf0;
+    --popover: #1e2029;
+    --popover-foreground: #e8eaf0;
+
+    /* Primary — brand red, unchanged */
+    --primary: #e84422;
+    --primary-foreground: #ffffff;
+    --primary-hover: #ff5533;
+
+    --secondary: #1e2029;
+    --secondary-foreground: #e8eaf0;
+    --muted: #1e2029;
+    --muted-foreground: #8b91a7;
+
+    --accent: #e84422;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+
+    --border: #252836;
+    --border-strong: #323548;
+    --input: #1e2029;
+    --ring: #e84422;
+
+    /* Elevation */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -1px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.35);
+
+    /* Sport status */
+    --win: #22c55e;
+    --draw: #f59e0b;
+    --loss: #ef4444;
+    --live: #e84422;
+}
+
+/* ─── BASE ──────────────────────────────────────────────────── */
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+        box-sizing: border-box;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        font-family: var(--font-sans);
+        font-size: 14px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* ─── UTILITIES ─────────────────────────────────────────────── */
+@layer utilities {
+    /* Brand wordmark uses Anton */
+    .font-display {
+        font-family: var(--font-display);
+        text-transform: uppercase;
+    }
+
+    .font-score {
+        font-family: var(--font-mono);
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+
+    /* Elevation helpers */
+    .shadow-xs {
+        box-shadow: var(--shadow-xs);
+    }
+    .shadow-card {
+        box-shadow: var(--shadow-sm);
+    }
+    .shadow-raised {
+        box-shadow: var(--shadow);
+    }
+    .shadow-float {
+        box-shadow: var(--shadow-md);
+    }
+    .shadow-overlay {
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Section label */
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .section-label::before {
+        content: "";
+        display: block;
+        width: 3px;
+        height: 20px;
+        background: var(--accent);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    /* Live pulse */
+    .badge-live {
+        animation: pulse-live 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-live {
+        0%, 100% { border-color: rgba(232, 68, 34, 0.4); }
+        50% { border-color: transparent; }
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+
+    /* Score flash */
+    .score-flash {
+        animation: flash-accent 0.3s ease-out;
+    }
+
+    @keyframes flash-accent {
+        0% { color: var(--accent); }
+        100% { color: var(--foreground); }
+    }
+
+    /* Result pills */
+    .pill-w { width: 10px; height: 10px; border-radius: 50%; background: var(--win); }
+    .pill-d { width: 10px; height: 10px; border-radius: 50%; background: var(--draw); }
+    .pill-l { width: 10px; height: 10px; border-radius: 50%; background: var(--loss); }
+
+    /* Table sport */
+    .table-sport th {
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted-foreground);
+        font-weight: 600;
+        padding: 10px 14px;
+    }
+
+    .table-sport td {
+        padding: 11px 14px;
+        font-size: 0.875rem;
+        border-bottom: 1px solid var(--border);
+    }
+}

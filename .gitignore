@@ -1,0 +1,34 @@
+# Dependencies
+app/node_modules/
+
+# Next.js build output
+app/.next/
+app/out/
+
+# Environment variables
+app/.env
+app/.env.local
+app/.env.development.local
+app/.env.test.local
+app/.env.production.local
+
+# Prisma
+app/prisma/migrations/
+
+# Build artifacts
+app/tsconfig.tsbuildinfo
+app/next-env.d.ts
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
