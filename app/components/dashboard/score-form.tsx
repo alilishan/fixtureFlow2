@@ -33,7 +33,7 @@ export function ScoreForm({ match }: { match: Match }) {
 
     return (
         <form action={handleAction} className="bg-card border border-border p-6">
-            <h2 className="font-display text-sm tracking-wider mb-5 text-muted-foreground">
+            <h2 className="font-sans font-semibold text-sm tracking-wider mb-5 text-muted-foreground">
                 UPDATE SCORE
             </h2>
 

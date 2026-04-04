@@ -2,6 +2,8 @@ import { db } from "@/lib/db"
 import { getSeasonLabel } from "@/lib/season"
 import { getActiveSeason } from "@/lib/get-active-season"
 import { SeasonsManager } from "@/components/dashboard/seasons-manager"
+import { ChangePasswordForm } from "@/components/dashboard/change-password-form"
+import { SectionHeading } from "@/components/dashboard/section-heading"
 
 export default async function SettingsPage() {
     const currentSeason = getSeasonLabel()
@@ -20,9 +22,20 @@ export default async function SettingsPage() {
                 Club configuration
             </p>
 
+            {/* Change Password */}
+            <section className="mb-10">
+                <SectionHeading className="mb-1">Change Password</SectionHeading>
+                <p className="text-sm text-muted-foreground mb-4">
+                    Update your account password.
+                </p>
+                <ChangePasswordForm />
+            </section>
+
+            <hr className="border-border mb-10" />
+
             {/* Seasons */}
             <section>
-                <h2 className="font-display text-lg mb-1">Seasons</h2>
+                <SectionHeading className="mb-1">Seasons</SectionHeading>
                 <p className="text-sm text-muted-foreground mb-4">
                     Seasons group your tournaments. The active season filters the dashboard.
                 </p>

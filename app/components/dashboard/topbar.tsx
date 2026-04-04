@@ -40,7 +40,7 @@ export function Topbar() {
         <header className="hidden lg:flex h-16 items-center px-6 border-b border-border bg-card shrink-0 gap-5">
             {/* Page title — larger/bolder to match brand preview */}
             <div className="shrink-0">
-                <h1 className="font-display text-[1.5rem] leading-tight text-foreground">{title}</h1>
+                <h1 className="font-sans font-bold text-[1.5rem] leading-tight text-foreground">{title}</h1>
             </div>
 
             {/* Pill search bar */}
@@ -54,7 +54,7 @@ export function Topbar() {
                 {/* Public pages dropdown */}
                 <DropdownMenu>
                     <DropdownMenuTrigger className="hidden xl:flex items-center gap-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.05em] text-foreground hover:text-primary transition-colors outline-none">
-                        View your club
+                        Public Site
                         <ChevronDown size={11} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" sideOffset={8}>

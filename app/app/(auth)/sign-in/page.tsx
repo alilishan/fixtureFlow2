@@ -3,13 +3,15 @@
 import { useActionState } from "react"
 import { signInAction } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 
 export default function SignInPage() {
     const [error, action, pending] = useActionState(signInAction, null)
 
     return (
-        <div className="bg-card border border-border p-8">
-            <h1 className="font-display text-xl mb-1">SIGN IN</h1>
+        <div className="bg-card border border-border p-8 rounded-lg shadow-float">
+            <h1 className="font-mono font-semibold tracking-widest text-xl mb-1">SIGN IN</h1>
             <p className="text-sm text-muted-foreground mb-6">Admin access only</p>
 
             <form action={action} className="flex flex-col gap-4">
@@ -20,13 +22,12 @@ export default function SignInPage() {
                     >
                         Email
                     </label>
-                    <input
+                    <Input
                         id="email"
                         name="email"
                         type="email"
                         autoComplete="email"
                         required
-                        className="h-10 px-3 bg-input border border-border text-sm text-foreground outline-none focus:border-ring transition-colors"
                     />
                 </div>
 
@@ -37,13 +38,11 @@ export default function SignInPage() {
                     >
                         Password
                     </label>
-                    <input
+                    <PasswordInput
                         id="password"
                         name="password"
-                        type="password"
                         autoComplete="current-password"
                         required
-                        className="h-10 px-3 bg-input border border-border text-sm text-foreground outline-none focus:border-ring transition-colors"
                     />
                 </div>
 
