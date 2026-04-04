@@ -3,6 +3,7 @@
 import { useActionState } from "react"
 import { changePasswordAction } from "@/lib/actions/auth"
 import { PasswordInput } from "@/components/ui/password-input"
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 export function ChangePasswordForm() {
@@ -10,6 +11,13 @@ export function ChangePasswordForm() {
 
     return (
         <form action={action} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+                <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground">
+                    Your Email
+                </label>
+                <Input id="email" name="email" type="email" autoComplete="email" required />
+            </div>
+
             <div className="flex flex-col gap-1.5">
                 <label htmlFor="currentPassword" className="text-xs uppercase tracking-widest text-muted-foreground">
                     Current Password

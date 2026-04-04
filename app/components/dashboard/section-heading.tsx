@@ -7,7 +7,7 @@ interface SectionHeadingProps {
 
 export function SectionHeading({ children, className }: SectionHeadingProps) {
     return (
-        <h2 className={cn("font-sans font-semibold text-lg", className)}>
+        <h2 className={cn("font-mono font-semibold text-lg", className)}>
             {children}
         </h2>
     )

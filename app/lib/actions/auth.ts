@@ -1,6 +1,6 @@
 "use server"
 
-import { signIn, auth } from "@/lib/auth"
+import { signIn } from "@/lib/auth"
 import { AuthError } from "next-auth"
 import { compare, hash } from "bcryptjs"
 import { db } from "@/lib/db"
@@ -27,6 +27,7 @@ export async function signInAction(_prevState: string | null, formData: FormData
 }
 
 const changePasswordSchema = z.object({
+    email: z.string().email("Invalid email"),
     currentPassword: z.string().min(1),
     newPassword: z.string().min(8, "New password must be at least 8 characters"),
     confirmPassword: z.string().min(1),
@@ -36,22 +37,20 @@ export async function changePasswordAction(
     _prevState: { error?: string; success?: string } | null,
     formData: FormData
 ) {
-    const session = await auth()
-    if (!session?.user?.id) return { error: "Not authenticated" }
-
     const parsed = changePasswordSchema.safeParse({
+        email: formData.get("email"),
         currentPassword: formData.get("currentPassword"),
         newPassword: formData.get("newPassword"),
         confirmPassword: formData.get("confirmPassword"),
     })
     if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" }
 
-    const { currentPassword, newPassword, confirmPassword } = parsed.data
+    const { email, currentPassword, newPassword, confirmPassword } = parsed.data
 
     if (newPassword !== confirmPassword) return { error: "New passwords do not match" }
 
-    const user = await db.user.findUnique({ where: { id: session.user.id } })
-    if (!user) return { error: "User not found" }
+    const user = await db.user.findUnique({ where: { email } })
+    if (!user) return { error: "No account found with that email" }
 
     const valid = await compare(currentPassword, user.hashedPassword)
     if (!valid) return { error: "Current password is incorrect" }
