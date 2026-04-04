@@ -28,6 +28,17 @@ enum Role {
   VIEWER
 }
 
+// ─── MARKETING ───────────────────────────────────────────
+
+model InterestSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  clubName  String?
+  message   String?
+  createdAt DateTime @default(now())
+}
+
 // ─── CLUB ────────────────────────────────────────────────
 
 model ClubSettings {

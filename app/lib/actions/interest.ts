@@ -3,56 +3,70 @@
 import { Resend } from "resend"
 import { z } from "zod"
 import { env } from "@/lib/env"
+import { db } from "@/lib/db"
 
 const schema = z.object({
-    email: z.string().email("Please enter a valid email address"),
+    name:     z.string().min(1, "Please enter your name"),
+    email:    z.string().email("Please enter a valid email address"),
+    clubName: z.string().optional(),
+    message:  z.string().optional(),
 })
 
 export async function submitInterestAction(
     _prevState: { error?: string; success?: boolean } | null,
     formData: FormData
 ) {
-    const parsed = schema.safeParse({ email: formData.get("email") })
-    if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid email" }
+    const parsed = schema.safeParse({
+        name:     formData.get("name"),
+        email:    formData.get("email"),
+        clubName: formData.get("clubName") || undefined,
+        message:  formData.get("message") || undefined,
+    })
+    if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" }
 
-    const { email } = parsed.data
+    const { name, email, clubName, message } = parsed.data
+
+    // Always log to DB
+    await db.interestSubmission.create({
+        data: { name, email, clubName, message },
+    })
 
     if (!env.RESEND_API_KEY) {
-        // No API key configured yet — log and return success so UX isn't broken in dev
-        console.log(`[interest] New interest from: ${email}`)
+        console.log(`[interest] ${name} <${email}>${clubName ? ` — ${clubName}` : ""}`)
         return { success: true }
     }
 
     try {
         const resend = new Resend(env.RESEND_API_KEY)
 
-        // Notify you of the new interest
+        // Notify you
         await resend.emails.send({
             from: env.RESEND_FROM_EMAIL,
-            // ⬇ Update this to your personal email to receive interest notifications
+            // ⬇ Update this to your personal email to receive notifications
             to: env.RESEND_FROM_EMAIL,
-            subject: `New FixtureFlow interest: ${email}`,
+            subject: `New FixtureFlow interest: ${name} (${email})`,
             html: `
-                <p>Someone just expressed interest in FixtureFlow.</p>
+                <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Email:</strong> ${email}</p>
-                <p><em>Submitted via the landing page.</em></p>
+                ${clubName ? `<p><strong>Club:</strong> ${clubName}</p>` : ""}
+                ${message ? `<p><strong>Message:</strong> ${message}</p>` : ""}
             `,
         })
 
-        // Send a confirmation to the interested person
+        // Confirm to the person
         await resend.emails.send({
             from: env.RESEND_FROM_EMAIL,
             to: email,
             subject: "You're on the FixtureFlow early access list",
             html: `
-                <p>Hi,</p>
-                <p>Thanks for your interest in FixtureFlow — we'll be in touch as we open up access.</p>
+                <p>Hi ${name},</p>
+                <p>Thanks for your interest in FixtureFlow — we'll be in touch when we're ready to onboard you.</p>
                 <p>— The FixtureFlow team</p>
             `,
         })
     } catch (err) {
         console.error("[interest] Resend error:", err)
-        return { error: "Something went wrong. Please try again." }
+        // DB already saved — don't fail the user over email
     }
 
     return { success: true }
