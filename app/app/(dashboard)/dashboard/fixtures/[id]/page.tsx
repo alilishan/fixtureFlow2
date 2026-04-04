@@ -2,7 +2,7 @@ import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ChevronLeft, MapPin, Calendar } from "lucide-react"
-import { ScoreForm } from "./_components/score-form"
+import { ScoreForm } from "@/components/dashboard/score-form"
 import { MatchStatusBadge } from "@/components/dashboard/match-status-badge"
 
 export default async function MatchDetailPage({ params }: { params: Promise<{ id: string }> }) {

@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import Link from "next/link"
 import { ChevronRight, Shield } from "lucide-react"
-import { CreateTeamDialog, TeamActions } from "./_components/team-dialogs"
+import { CreateTeamDialog, TeamActions } from "@/components/dashboard/team-dialogs"
 import { getActiveSeason } from "@/lib/get-active-season"
 
 export default async function TeamsPage() {

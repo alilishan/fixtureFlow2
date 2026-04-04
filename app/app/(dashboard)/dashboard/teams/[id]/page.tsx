@@ -2,7 +2,7 @@ import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ChevronLeft, UserCog } from "lucide-react"
-import { AddPlayerDialog, PlayerActions } from "./_components/player-dialogs"
+import { AddPlayerDialog, PlayerActions } from "@/components/dashboard/player-dialogs"
 
 export default async function TeamDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params

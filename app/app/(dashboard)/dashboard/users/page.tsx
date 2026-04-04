@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { auth } from "@/lib/auth"
-import { CreateUserDialog, DeleteUserButton } from "./_components/user-dialogs"
+import { CreateUserDialog, DeleteUserButton } from "@/components/dashboard/user-dialogs"
 
 const roleLabel: Record<string, string> = {
     ORGANISER: "Organiser",

@@ -2,8 +2,8 @@ import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ChevronLeft, Calendar } from "lucide-react"
-import { TournamentTeamPanel } from "./_components/tournament-team-panel"
-import { ScheduleMatchDialog } from "./_components/schedule-match-dialog"
+import { TournamentTeamPanel } from "@/components/dashboard/tournament-team-panel"
+import { ScheduleMatchDialog } from "@/components/dashboard/schedule-match-dialog"
 import { MatchStatusBadge } from "@/components/dashboard/match-status-badge"
 
 const typeLabel: Record<string, string> = {

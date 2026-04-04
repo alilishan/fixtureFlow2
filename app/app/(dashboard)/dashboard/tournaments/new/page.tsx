@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
-import { NewTournamentForm } from "./_components/new-tournament-form"
+import { NewTournamentForm } from "@/components/dashboard/new-tournament-form"
 import { getSeasonLabel } from "@/lib/season"
 
 export default async function NewTournamentPage() {

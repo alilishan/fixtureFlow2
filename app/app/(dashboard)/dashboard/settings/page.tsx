@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { getSeasonLabel } from "@/lib/season"
 import { getActiveSeason } from "@/lib/get-active-season"
-import { SeasonsManager } from "./_components/seasons-manager"
+import { SeasonsManager } from "@/components/dashboard/seasons-manager"
 
 export default async function SettingsPage() {
     const currentSeason = getSeasonLabel()

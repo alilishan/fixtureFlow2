@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { Users } from "lucide-react"
-import { CreateAgeGroupDialog } from "./_components/create-age-group-dialog"
-import { AgeGroupActions } from "./_components/age-group-actions"
+import { CreateAgeGroupDialog } from "@/components/dashboard/create-age-group-dialog"
+import { AgeGroupActions } from "@/components/dashboard/age-group-actions"
 
 export default async function AgeGroupsPage() {
     const ageGroups = await db.ageGroup.findMany({
