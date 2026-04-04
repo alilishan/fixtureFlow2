@@ -45,7 +45,7 @@ export default async function MatchDetailPage({ params }: { params: Promise<{ id
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
-                    <p className="font-display text-xl flex-1">{match.homeTeam.name}</p>
+                    <p className="font-sans font-semibold text-xl flex-1">{match.homeTeam.name}</p>
 
                     {match.status !== "SCHEDULED" ? (
                         <div className="font-score text-4xl px-4">
@@ -55,7 +55,7 @@ export default async function MatchDetailPage({ params }: { params: Promise<{ id
                         <div className="text-muted-foreground text-sm px-4">vs</div>
                     )}
 
-                    <p className="font-display text-xl flex-1 text-right">{match.awayTeam.name}</p>
+                    <p className="font-sans font-semibold text-xl flex-1 text-right">{match.awayTeam.name}</p>
                 </div>
 
                 <div className="flex items-center gap-4 mt-5 text-xs text-muted-foreground">

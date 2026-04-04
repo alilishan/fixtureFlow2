@@ -51,7 +51,7 @@ export default async function PublicFixturesPage({ searchParams }: Props) {
     return (
         <div>
             <div className="mb-6">
-                <h1 className="font-display text-3xl mb-1">Fixtures</h1>
+                <h1 className="font-sans font-bold text-3xl mb-1">Fixtures</h1>
                 <p className="font-sans font-light text-muted-foreground">
                     Schedule and results
                 </p>

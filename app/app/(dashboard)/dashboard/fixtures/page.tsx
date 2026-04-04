@@ -60,7 +60,7 @@ export default async function FixturesPage() {
         return (
             <div className="mb-8">
                 <div className="section-label mb-4">
-                    <span className="font-display text-sm tracking-wider">
+                    <span className="font-sans font-semibold text-sm tracking-wider">
                         {title} — {items.length}
                     </span>
                 </div>

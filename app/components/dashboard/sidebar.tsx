@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { Logo } from "@/components/ui/logo"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import {
@@ -131,7 +132,7 @@ function SidebarContent({
                                 className="object-cover"
                             />
                         ) : (
-                            <span className="font-display text-[0.75rem] text-white leading-none">
+                            <span className="font-sans font-bold text-[0.75rem] text-white leading-none">
                                 {initials}
                             </span>
                         )}
@@ -213,13 +214,7 @@ function SidebarContent({
 
             {/* ── FixtureFlow branding + copyright ──────────────────── */}
             <div className="px-5 pb-6 pt-2 shrink-0">
-                <span
-                    className="font-display text-[0.9375rem] tracking-[0.06em] select-none"
-                    aria-label="FixtureFlow"
-                >
-                    <span className="text-foreground">Fixture</span>
-                    <span className="text-primary">Flow</span>
-                </span>
+                <Logo width={100} className="mb-1.5" />
                 <p className="text-[0.6875rem] text-muted-foreground mt-1.5 leading-snug">
                     © {new Date().getFullYear()} FixtureFlow.
                     <br />
@@ -262,18 +257,12 @@ export function Sidebar({
                                 className="object-cover"
                             />
                         ) : (
-                            <span className="font-display text-[0.5625rem] text-white leading-none">
+                            <span className="font-sans font-bold text-[0.5625rem] text-white leading-none">
                                 {getInitials(clientEnv.NEXT_PUBLIC_CLUB_NAME)}
                             </span>
                         )}
                     </div>
-                    <span
-                        className="font-display text-[0.9375rem] tracking-[0.06em] select-none"
-                        aria-label="FixtureFlow"
-                    >
-                        <span className="text-foreground">Fixture</span>
-                        <span className="text-primary">Flow</span>
-                    </span>
+                    <Logo width={90} />
                 </div>
                 <button
                     onClick={() => setMobileOpen(true)}
@@ -292,13 +281,7 @@ export function Sidebar({
                     />
                     <aside className="lg:hidden fixed top-0 left-0 bottom-0 z-50 w-[270px] bg-card border-r border-border flex flex-col shadow-overlay">
                         <div className="flex items-center justify-between px-5 h-14 border-b border-border shrink-0">
-                            <span
-                                className="font-display text-[1rem] tracking-[0.06em] select-none"
-                                aria-label="FixtureFlow"
-                            >
-                                <span className="text-foreground">Fixture</span>
-                                <span className="text-primary">Flow</span>
-                            </span>
+                            <Logo width={100} />
                             <button
                                 onClick={() => setMobileOpen(false)}
                                 className="text-muted-foreground hover:text-foreground p-1"

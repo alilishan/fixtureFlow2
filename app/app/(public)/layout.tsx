@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import { Logo } from "@/components/ui/logo"
 import { clientEnv } from "@/lib/env.client"
 
 function getInitials(name: string) {
@@ -35,7 +36,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                                     className="object-cover"
                                 />
                             ) : (
-                                <span className="font-display text-[0.625rem] text-white leading-none">
+                                <span className="font-sans font-bold text-[0.625rem] text-white leading-none">
                                     {getInitials(clubName)}
                                 </span>
                             )}
@@ -81,10 +82,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <footer className="border-t border-border mt-16">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
                     <p className="text-xs text-muted-foreground">{clubName}</p>
-                    <span className="font-display text-[0.75rem] tracking-[0.06em] select-none text-muted-foreground">
-                        Powered by{" "}
-                        <span className="text-foreground">Fixture</span>
-                        <span className="text-primary">Flow</span>
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        Powered by <Logo width={72} />
                     </span>
                 </div>
             </footer>

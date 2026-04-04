@@ -41,7 +41,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ id:
             {/* Players */}
             <div>
                 <div className="section-label mb-5">
-                    <span className="font-display text-sm tracking-wider">
+                    <span className="font-sans font-semibold text-sm tracking-wider">
                         SQUAD — {team.players.length} player{team.players.length !== 1 ? "s" : ""}
                     </span>
                 </div>

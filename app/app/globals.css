@@ -7,7 +7,6 @@
 @theme inline {
     /* Fonts */
     --font-sans: "Inter", system-ui, sans-serif;
-    --font-display: "Anton", system-ui, sans-serif;
     --font-mono: "JetBrains Mono", monospace;
 
     /* Radius — rounded, modern */
@@ -155,12 +154,6 @@
 
 /* ─── UTILITIES ─────────────────────────────────────────────── */
 @layer utilities {
-    /* Brand wordmark uses Anton */
-    .font-display {
-        font-family: var(--font-display);
-        text-transform: uppercase;
-    }
-
     .font-score {
         font-family: var(--font-mono);
         font-variant-numeric: tabular-nums;

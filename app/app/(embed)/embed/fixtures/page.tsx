@@ -1,3 +1,4 @@
+import { Logo } from "@/components/ui/logo"
 import { db } from "@/lib/db"
 import { MatchStatusBadge } from "@/components/dashboard/match-status-badge"
 
@@ -78,10 +79,7 @@ export default async function EmbedFixturesPage({ searchParams }: Props) {
 
             {/* Attribution */}
             <div className="border-t border-border px-3 py-2 flex justify-end">
-                <span className="font-display text-[0.5625rem] tracking-[0.06em] text-muted-foreground select-none">
-                    <span>Fixture</span>
-                    <span className="text-primary">Flow</span>
-                </span>
+                <Logo width={56} />
             </div>
         </div>
     )

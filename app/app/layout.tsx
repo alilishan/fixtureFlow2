@@ -1,17 +1,10 @@
 import type { Metadata } from "next"
-import { Anton, Inter, JetBrains_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono } from "next/font/google"
 import { ThemeProvider } from "next-themes"
 import { Toaster } from "sonner"
 import { Providers } from "@/components/providers"
 import { clubConfig } from "@/lib/club-config"
 import "./globals.css"
-
-const anton = Anton({
-    subsets: ["latin"],
-    weight: ["400"],
-    variable: "--font-display",
-    display: "swap",
-})
 
 const inter = Inter({
     subsets: ["latin"],
@@ -36,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html
             lang="en"
-            className={`${anton.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+            className={`${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
             <body className="min-h-screen bg-background text-foreground antialiased" suppressHydrationWarning>

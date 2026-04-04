@@ -64,7 +64,7 @@ export default async function TournamentDetailPage({
                 {/* Fixtures — 2/3 width */}
                 <div className="lg:col-span-2">
                     <div className="section-label mb-5">
-                        <span className="font-display text-sm tracking-wider">
+                        <span className="font-sans font-semibold text-sm tracking-wider">
                             FIXTURES — {tournament.matches.length}
                         </span>
                     </div>
@@ -119,7 +119,7 @@ export default async function TournamentDetailPage({
                 {/* Teams — 1/3 width */}
                 <div>
                     <div className="section-label mb-5">
-                        <span className="font-display text-sm tracking-wider">
+                        <span className="font-sans font-semibold text-sm tracking-wider">
                             TEAMS — {tournament.teams.length}
                         </span>
                     </div>
