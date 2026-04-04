@@ -196,6 +196,21 @@
         flex-shrink: 0;
     }
 
+    /* ── Marketing animations ─────────────────────────────── */
+    @keyframes marquee-scroll {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+    }
+
+    .animate-marquee {
+        animation: marquee-scroll 40s linear infinite;
+        will-change: transform;
+    }
+
+    .animate-marquee:hover {
+        animation-play-state: paused;
+    }
+
     /* Live pulse */
     .badge-live {
         animation: pulse-live 2s ease-in-out infinite;

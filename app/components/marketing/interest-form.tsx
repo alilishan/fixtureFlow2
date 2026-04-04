@@ -92,7 +92,7 @@ export function InterestForm({ variant = "default" }: { variant?: "default" | "c
                     <input
                         {...register("name")}
                         type="text"
-                        placeholder="Ali Lishan"
+                        placeholder="John Doe"
                         className={inputCls(!!errors.name)}
                     />
                 </Field>

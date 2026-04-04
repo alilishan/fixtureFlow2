@@ -1,89 +1,99 @@
+import Image from "next/image"
 import Link from "next/link"
 import { Logo } from "@/components/ui/logo"
 import { InterestForm } from "@/components/marketing/interest-form"
+import { Reveal } from "@/components/marketing/reveal"
 import {
-    Calendar,
-    BarChart2,
-    Trophy,
-    Layers,
-    Globe,
-    Users,
-    Check,
-    X,
-    Code2,
-    Zap,
-    ArrowRight,
+    Calendar, BarChart2, Trophy, Layers, Globe, Users,
+    Check, X, Zap, ArrowRight, ChevronRight,
 } from "lucide-react"
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// ─── Colours forced for the dark sections ────────────────────────────────────
+const DARK_BG   = "#0e0f14"
+const DARK_CARD = "#16181f"
+const DARK_FG   = "#e8eaf0"
+const DARK_MUTED = "#8b91a7"
+const DARK_BORDER = "#252836"
+const RED = "#e84422"
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const marqueeItems = [
+    "Live Scores", "Season Management", "Knockout Brackets",
+    "Embeddable Widgets", "Automatic Standings", "Public Club Pages",
+    "Role-Based Access", "Multi-Age-Group", "No Per-Player Fees",
+    "Real-Time Updates", "Tournament Brackets", "Beautiful Design",
+]
 
 const features = [
     {
-        icon: Zap,
+        icon: Zap, span: 2,
         title: "Live Score Updates",
-        description:
-            "Enter scores from any device and watch standings recalculate instantly. No refresh, no delay, no spreadsheet.",
+        description: "Enter scores from any device and watch standings recalculate instantly. No refresh, no spreadsheet, no WhatsApp.",
+        detail: "Supports LIVE match status so your supporters can follow in real-time.",
     },
     {
-        icon: Globe,
-        title: "Embeddable Widgets",
-        description:
-            "Already have a club website? Drop your fixtures or standings table anywhere with a single embed code.",
-    },
-    {
-        icon: Trophy,
+        icon: Trophy, span: 1,
         title: "Knockout Brackets",
-        description:
-            "Run cup competitions and playoffs with automatic bracket progression. Handles byes, replays, and finals.",
+        description: "Run cup competitions and playoffs with automatic bracket progression. Handles byes, replays, and multi-stage tournaments.",
+        detail: null,
     },
     {
-        icon: Layers,
+        icon: Layers, span: 1,
         title: "Season Scoping",
-        description:
-            "Switch between seasons in one click. Full history stays intact — your current season stays clean and focused.",
+        description: "Switch between seasons in a click. Every tournament, fixture, and standing is scoped to the active season.",
+        detail: null,
     },
     {
-        icon: Calendar,
+        icon: Globe, span: 2,
+        title: "Embeddable Widgets",
+        description: "Already have a Wix, Squarespace, or WordPress club site? Drop your live fixtures or standings table anywhere with one line of code. No API key. No plugin.",
+        detail: "Works on any website that accepts an iframe — takes 30 seconds to set up.",
+    },
+    {
+        icon: Calendar, span: 2,
         title: "Public Club Pages",
-        description:
-            "A ready-made public site — fixtures, standings, bracket. Share a link with supporters, no setup needed.",
+        description: "Every club gets a ready-made public site — fixtures, results, standings, and brackets. Share a link with supporters. No account, no app, no friction.",
+        detail: "Works in light and dark mode. Looks great on every device.",
     },
     {
-        icon: Users,
-        title: "Multi-Age-Group Support",
-        description:
-            "Manage every team from U7 to adults under one roof. Coaches see only their teams. Admins see everything.",
+        icon: Users, span: 1,
+        title: "Multi-Age-Group",
+        description: "Manage every team from U7 to adults under one roof. Coaches see only their squads. Admins see everything.",
+        detail: null,
     },
 ]
 
 const comparison = [
-    { feature: "Live score updates",     ff: true,  pitchero: true,  fulltime: false },
-    { feature: "Embeddable widgets",     ff: true,  pitchero: false, fulltime: false },
-    { feature: "Tournament brackets",    ff: true,  pitchero: false, fulltime: false },
-    { feature: "Season history",         ff: true,  pitchero: false, fulltime: false },
-    { feature: "Public club pages",      ff: true,  pitchero: true,  fulltime: false },
-    { feature: "No per-player fees",     ff: true,  pitchero: false, fulltime: true  },
-    { feature: "Multi-age-group",        ff: true,  pitchero: true,  fulltime: false },
-    { feature: "Role-based access",      ff: true,  pitchero: true,  fulltime: false },
+    { feature: "Live score updates",   ff: true,  pitchero: true,  fulltime: false },
+    { feature: "Embeddable widgets",   ff: true,  pitchero: false, fulltime: false },
+    { feature: "Tournament brackets",  ff: true,  pitchero: false, fulltime: false },
+    { feature: "Season history",       ff: true,  pitchero: false, fulltime: false },
+    { feature: "Public club pages",    ff: true,  pitchero: true,  fulltime: false },
+    { feature: "No per-player fees",   ff: true,  pitchero: false, fulltime: true  },
+    { feature: "Multi-age-group",      ff: true,  pitchero: true,  fulltime: false },
+    { feature: "Role-based access",    ff: true,  pitchero: true,  fulltime: false },
 ]
 
-const stats = [
-    { value: "1 dashboard", label: "for every team & age group" },
-    { value: "Real-time", label: "standings after every score" },
-    { value: "Zero setup", label: "for public club pages" },
-]
+// ─── Small helpers ─────────────────────────────────────────────────────────
 
-// ─── Components ──────────────────────────────────────────────────────────────
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function RedLabel({ children }: { children: React.ReactNode }) {
     return (
-        <p className="font-mono text-xs uppercase tracking-[0.15em] text-primary mb-3">
+        <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-primary mb-4">
             {children}
         </p>
     )
 }
 
-function ScreenshotPlaceholder({
+function Tick({ ok, dark }: { ok: boolean; dark?: boolean }) {
+    return ok ? (
+        <Check size={14} style={{ color: "#16a34a" }} className="mx-auto" />
+    ) : (
+        <X size={14} className={`mx-auto ${dark ? "text-white/15" : "text-muted-foreground/30"}`} />
+    )
+}
+
+function ScreenshotFrame({
     label,
     description,
     tall,
@@ -93,29 +103,35 @@ function ScreenshotPlaceholder({
     tall?: boolean
 }) {
     return (
-        <div
-            className={`w-full rounded-xl border border-border bg-muted/50 flex flex-col items-center justify-center text-center gap-3 px-6 ${tall ? "min-h-[480px]" : "min-h-[340px]"}`}
-            style={{
-                backgroundImage:
-                    "repeating-linear-gradient(0deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px)",
-            }}
-        >
-            <div className="bg-card border border-border rounded-lg px-5 py-4 max-w-sm">
-                <p className="font-mono text-xs uppercase tracking-widest text-primary mb-1.5">
-                    Screenshot
-                </p>
-                <p className="font-sans font-semibold text-sm text-foreground mb-1">{label}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+        <div className={`rounded-xl border border-border overflow-hidden shadow-float ${tall ? "min-h-[460px]" : "min-h-[320px]"} flex flex-col`}>
+            {/* Browser chrome */}
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card shrink-0">
+                <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+                <span className="size-2.5 rounded-full bg-[#febc2e]" />
+                <span className="size-2.5 rounded-full bg-[#28c840]" />
+                <div className="flex-1 mx-4 h-6 bg-muted rounded-md flex items-center px-3">
+                    <span className="font-mono text-[0.6rem] text-muted-foreground">
+                        app.fixtureflow.app/dashboard
+                    </span>
+                </div>
+            </div>
+            {/* Content area */}
+            <div
+                className="flex-1 flex items-center justify-center bg-muted/40 px-6 py-8"
+                style={{
+                    backgroundImage:
+                        "repeating-linear-gradient(0deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px)",
+                }}
+            >
+                <div className="bg-card border border-border rounded-lg px-5 py-4 max-w-xs text-center">
+                    <span className="font-mono text-[0.625rem] uppercase tracking-[0.15em] text-primary block mb-2">
+                        Screenshot placeholder
+                    </span>
+                    <p className="font-mono font-semibold text-sm text-foreground mb-1.5">{label}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+                </div>
             </div>
         </div>
-    )
-}
-
-function Tick({ ok }: { ok: boolean }) {
-    return ok ? (
-        <Check size={15} className="text-[var(--win)] mx-auto" />
-    ) : (
-        <X size={15} className="text-muted-foreground/40 mx-auto" />
     )
 }
 
@@ -125,359 +141,512 @@ export default function MarketingPage() {
     return (
         <div className="min-h-screen bg-background text-foreground">
 
-            {/* ── Nav ─────────────────────────────────────────────────────── */}
-            <nav className="sticky top-0 z-20 bg-background/80 backdrop-blur border-b border-border">
+            {/* ── Sticky nav ──────────────────────────────────────────────── */}
+            <nav
+                className="sticky top-0 z-30 backdrop-blur-md border-b"
+                style={{ background: "color-mix(in srgb, var(--background) 85%, transparent)", borderColor: "var(--border)" }}
+            >
                 <div className="max-w-5xl mx-auto px-5 sm:px-8 h-14 flex items-center justify-between">
                     <Logo width={120} />
-                    <div className="flex items-center gap-4">
-                        <Link
-                            href="/dashboard"
-                            className="hidden sm:block text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
+                    <div className="flex items-center gap-5">
+                        <Link href="/dashboard" className="hidden sm:block text-xs text-muted-foreground hover:text-foreground transition-colors">
                             Sign in
                         </Link>
                         <a
                             href="#early-access"
-                            className="h-8 px-4 bg-primary text-primary-foreground text-xs font-semibold rounded-md hover:bg-[var(--primary-hover)] transition-colors flex items-center gap-1.5"
+                            className="h-8 px-4 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                            style={{ background: RED, color: "#fff" }}
                         >
-                            Get early access
-                            <ArrowRight size={11} />
+                            Get early access <ArrowRight size={11} />
                         </a>
                     </div>
                 </div>
             </nav>
 
             <main>
-                {/* ── Hero ────────────────────────────────────────────────── */}
+                {/* ══════════════════════════════════════════════════════════
+                    HERO — forced dark, monumental type
+                ══════════════════════════════════════════════════════════ */}
                 <section
-                    className="relative border-b border-border overflow-hidden"
-                    style={{
-                        backgroundImage:
-                            "radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 60%)",
-                    }}
+                    className="relative overflow-hidden"
+                    style={{ background: DARK_BG, color: DARK_FG }}
                 >
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-20 pb-16 sm:pt-28 sm:pb-24">
-                        <div className="max-w-2xl">
-                            <div className="inline-flex items-center gap-2 border border-primary/30 bg-primary/8 rounded-full px-3 py-1 mb-7">
-                                <span className="size-1.5 rounded-full bg-primary shrink-0" />
-                                <span className="font-mono text-[0.6875rem] uppercase tracking-widest text-primary">
-                                    Early access — now open
-                                </span>
-                            </div>
+                    {/* Red glow */}
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            backgroundImage: `
+                                radial-gradient(ellipse 55% 60% at 85% 15%, rgba(232,68,34,0.13), transparent),
+                                radial-gradient(ellipse 40% 40% at 10% 90%, rgba(232,68,34,0.05), transparent)
+                            `,
+                        }}
+                    />
+                    {/* Dot grid */}
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
+                            backgroundSize: "28px 28px",
+                        }}
+                    />
+                    {/* Giant decorative "FF" */}
+                    <span
+                        className="absolute right-0 top-1/2 -translate-y-1/2 font-mono font-bold leading-none select-none pointer-events-none translate-x-8 sm:translate-x-0"
+                        style={{
+                            fontSize: "clamp(12rem, 28vw, 26rem)",
+                            color: "#fff",
+                            opacity: 0.025,
+                            letterSpacing: "-0.05em",
+                        }}
+                        aria-hidden
+                    >
+                        FF
+                    </span>
 
-                            <h1 className="font-mono font-bold text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.1] tracking-tight text-foreground mb-6">
-                                From fixtures
-                                <br />
-                                to final whistles.
-                            </h1>
+                    <div className="relative max-w-5xl mx-auto px-5 sm:px-8 pt-20 pb-16 sm:pt-28 sm:pb-28">
+                        {/* Badge */}
+                        <div
+                            className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-8 border"
+                            style={{ borderColor: `${RED}44`, background: `${RED}14` }}
+                        >
+                            <span className="size-1.5 rounded-full shrink-0" style={{ background: RED }} />
+                            <span className="font-mono text-[0.6375rem] uppercase tracking-[0.18em]" style={{ color: RED }}>
+                                Early access — now open
+                            </span>
+                        </div>
 
-                            <p className="font-sans text-base sm:text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl">
-                                FixtureFlow is the clean, modern club management platform for football
-                                clubs who want beautiful fixtures, live results, and automatic
-                                standings — without the complexity or the cost.
+                        {/* Main headline */}
+                        <h1
+                            className="font-mono font-bold leading-[1.05] tracking-tight mb-8"
+                            style={{ fontSize: "clamp(2.6rem, 7vw, 5.5rem)", color: DARK_FG }}
+                        >
+                            From fixtures
+                            <br />
+                            to final{" "}
+                            <span style={{ color: RED }}>whistles.</span>
+                        </h1>
+
+                        <div className="max-w-xl">
+                            <p className="font-sans text-base sm:text-lg leading-relaxed mb-10" style={{ color: DARK_MUTED }}>
+                                FixtureFlow is the modern club management platform for football clubs
+                                who want beautiful fixtures, live results, and automatic standings —
+                                without the complexity or the cost.
                             </p>
-
                             <InterestForm />
                         </div>
-                    </div>
-                </section>
 
-                {/* ── Stats bar ───────────────────────────────────────────── */}
-                <section className="border-b border-border bg-card">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-8 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
-                        {stats.map((s) => (
-                            <div key={s.label} className="py-5 sm:py-0 sm:px-8 first:pl-0 last:pr-0">
-                                <p className="font-mono font-bold text-xl text-foreground mb-0.5">
-                                    {s.value}
-                                </p>
-                                <p className="text-xs text-muted-foreground">{s.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* ── Problem ─────────────────────────────────────────────── */}
-                <section className="border-b border-border">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
-                        <div className="max-w-2xl">
-                            <SectionLabel>The problem</SectionLabel>
-                            <h2 className="font-mono font-bold text-2xl sm:text-3xl text-foreground mb-5">
-                                Most clubs are still managing fixtures in WhatsApp groups and
-                                Google Sheets.
-                            </h2>
-                            <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-                                <p>
-                                    The alternatives — Pitchero, FullTime FA, TeamSnap — were built for a different era. They&apos;re slow, cluttered, and often require every parent and player to download yet another app before they can see anything.
-                                </p>
-                                <p>
-                                    Pitchero charges per-player. FullTime FA looks like it was designed in 2005. TeamSnap is built for the US market and priced to match. None of them let you embed your standings table on your existing club website.
-                                </p>
-                                <p className="text-foreground font-medium">
-                                    FixtureFlow is different. One admin dashboard. Beautiful public pages. Widgets you can drop onto any website. And a design that doesn&apos;t make your eyes bleed.
-                                </p>
-                            </div>
+                        {/* Floating stat pills */}
+                        <div className="flex flex-wrap gap-3 mt-12">
+                            {[
+                                "Live scores",
+                                "Auto standings",
+                                "Embeddable widgets",
+                                "Knockout brackets",
+                                "Public pages",
+                            ].map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="font-mono text-[0.6875rem] uppercase tracking-wider px-3 py-1.5 rounded-full border"
+                                    style={{ color: DARK_MUTED, borderColor: DARK_BORDER }}
+                                >
+                                    {tag}
+                                </span>
+                            ))}
                         </div>
                     </div>
                 </section>
 
-                {/* ── Features ────────────────────────────────────────────── */}
-                <section className="border-b border-border bg-card">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
-                        <SectionLabel>Features</SectionLabel>
-                        <h2 className="font-mono font-bold text-2xl sm:text-3xl text-foreground mb-3">
-                            Everything your club actually needs.
-                        </h2>
-                        <p className="text-sm text-muted-foreground mb-12 max-w-lg">
-                            Built around how clubs actually work — multiple teams, multiple age groups, real tournaments, and supporters who just want to see the results.
-                        </p>
+                {/* ══════════════════════════════════════════════════════════
+                    MARQUEE — kinetic feature ticker
+                ══════════════════════════════════════════════════════════ */}
+                <div
+                    className="overflow-hidden border-y py-4 select-none"
+                    style={{ background: DARK_CARD, borderColor: DARK_BORDER }}
+                >
+                    <div className="flex animate-marquee whitespace-nowrap">
+                        {[...marqueeItems, ...marqueeItems].map((item, i) => (
+                            <span key={i} className="flex items-center gap-4 mx-4">
+                                <span className="font-mono text-xs uppercase tracking-[0.14em]" style={{ color: DARK_MUTED }}>
+                                    {item}
+                                </span>
+                                <span className="size-1 rounded-full shrink-0" style={{ background: RED }} />
+                            </span>
+                        ))}
+                    </div>
+                </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
-                            {features.map((f) => {
+                {/* ══════════════════════════════════════════════════════════
+                    PROBLEM
+                ══════════════════════════════════════════════════════════ */}
+                <section className="border-b border-border relative overflow-hidden">
+                    {/* Faint section number */}
+                    <span
+                        className="absolute right-4 top-4 font-mono font-bold leading-none select-none pointer-events-none"
+                        style={{ fontSize: "clamp(5rem, 16vw, 14rem)", color: "var(--border)", opacity: 0.8 }}
+                        aria-hidden
+                    >
+                        01
+                    </span>
+                    <div className="relative max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+                        <div className="max-w-2xl">
+                            <Reveal>
+                                <RedLabel>The problem</RedLabel>
+                                <h2 className="font-mono font-bold text-2xl sm:text-[2rem] text-foreground mb-6 leading-tight">
+                                    Most clubs are still managing fixtures in WhatsApp groups and Google Sheets.
+                                </h2>
+                            </Reveal>
+                            <Reveal delay={100}>
+                                <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+                                    <p>
+                                        The alternatives — Pitchero, FullTime FA, TeamSnap — were built for a different era. They&apos;re slow, cluttered, and require every parent to download yet another app before they can see anything.
+                                    </p>
+                                    <p>
+                                        Pitchero charges per-player. FullTime FA looks like it was designed in 2005. TeamSnap is priced for the US market. None of them let you embed your standings table on your existing club website.
+                                    </p>
+                                </div>
+                            </Reveal>
+                            <Reveal delay={180}>
+                                <div
+                                    className="mt-7 border-l-2 pl-5 py-1"
+                                    style={{ borderColor: RED }}
+                                >
+                                    <p className="text-sm font-medium text-foreground leading-relaxed">
+                                        FixtureFlow is different. One admin dashboard. Beautiful public pages. Widgets for any website. A design that doesn&apos;t make your eyes bleed.
+                                    </p>
+                                </div>
+                            </Reveal>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══════════════════════════════════════════════════════════
+                    FEATURES — asymmetric bento grid
+                ══════════════════════════════════════════════════════════ */}
+                <section className="border-b border-border bg-card relative overflow-hidden">
+                    <span
+                        className="absolute right-4 top-4 font-mono font-bold leading-none select-none pointer-events-none"
+                        style={{ fontSize: "clamp(5rem, 16vw, 14rem)", color: "var(--border)", opacity: 0.8 }}
+                        aria-hidden
+                    >
+                        02
+                    </span>
+                    <div className="relative max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+                        <Reveal>
+                            <RedLabel>Features</RedLabel>
+                            <h2 className="font-mono font-bold text-2xl sm:text-[2rem] text-foreground mb-2 leading-tight">
+                                Everything your club actually needs.
+                            </h2>
+                            <p className="text-sm text-muted-foreground mb-12 max-w-lg">
+                                Built around how clubs work — multiple teams, age groups, real tournaments, and supporters who just want the results.
+                            </p>
+                        </Reveal>
+
+                        {/* Bento grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-xl overflow-hidden">
+                            {features.map((f, i) => {
                                 const Icon = f.icon
+                                const isLarge = f.span === 2
                                 return (
-                                    <div
+                                    <Reveal
                                         key={f.title}
-                                        className="bg-card p-7 group hover:bg-muted/40 transition-colors"
+                                        delay={i * 60}
+                                        className={`bg-card group hover:bg-muted/30 transition-colors duration-200 ${isLarge ? "lg:col-span-2" : "lg:col-span-1"}`}
                                     >
-                                        <div className="size-8 rounded-md bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
-                                            <Icon size={15} className="text-primary" />
+                                        <div className="p-7 h-full flex flex-col">
+                                            <div
+                                                className="size-9 rounded-lg flex items-center justify-center mb-5 transition-colors group-hover:bg-primary/15"
+                                                style={{ background: `${RED}18` }}
+                                            >
+                                                <Icon size={16} style={{ color: RED }} />
+                                            </div>
+                                            <h3 className="font-mono font-semibold text-sm text-foreground mb-2">
+                                                {f.title}
+                                            </h3>
+                                            <p className="text-xs text-muted-foreground leading-relaxed flex-1">
+                                                {f.description}
+                                            </p>
+                                            {f.detail && (
+                                                <p
+                                                    className="mt-4 text-xs font-medium flex items-center gap-1.5"
+                                                    style={{ color: RED }}
+                                                >
+                                                    <ChevronRight size={11} />
+                                                    {f.detail}
+                                                </p>
+                                            )}
                                         </div>
-                                        <h3 className="font-mono font-semibold text-sm text-foreground mb-2">
-                                            {f.title}
-                                        </h3>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">
-                                            {f.description}
-                                        </p>
-                                    </div>
+                                    </Reveal>
                                 )
                             })}
                         </div>
                     </div>
                 </section>
 
-                {/* ── Screenshot 1: Dashboard ──────────────────────────────── */}
+                {/* ══════════════════════════════════════════════════════════
+                    DASHBOARD SCREENSHOT
+                ══════════════════════════════════════════════════════════ */}
                 <section className="border-b border-border">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
                         <div className="flex flex-col lg:flex-row lg:items-start gap-12">
-                            <div className="lg:w-80 shrink-0">
-                                <SectionLabel>The dashboard</SectionLabel>
-                                <h2 className="font-mono font-bold text-2xl text-foreground mb-4">
+                            <Reveal direction="left" className="lg:w-72 shrink-0">
+                                <RedLabel>The dashboard</RedLabel>
+                                <h2 className="font-mono font-bold text-2xl text-foreground mb-4 leading-tight">
                                     One place for everything.
                                 </h2>
-                                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                                    The admin dashboard gives you a clear overview of every fixture, result, and standing across all your tournaments and age groups — filtered to the current season.
+                                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                                    The admin dashboard gives you a clear overview of every fixture, result, and standing across all your tournaments — filtered to the active season.
                                 </p>
-                                <ul className="space-y-2.5">
+                                <ul className="space-y-3">
                                     {[
                                         "Switch seasons without losing history",
                                         "Update scores from any device",
-                                        "Manage all age groups from one place",
-                                        "Role-based access for coaches & admins",
-                                    ].map((item) => (
-                                        <li key={item} className="flex items-start gap-2.5 text-xs text-muted-foreground">
-                                            <Check size={13} className="text-primary mt-0.5 shrink-0" />
+                                        "All age groups in one roof",
+                                        "Role-based access for coaches",
+                                    ].map((item, i) => (
+                                        <li key={i} className="flex items-center gap-2.5 text-xs text-muted-foreground">
+                                            <Check size={12} style={{ color: RED }} className="shrink-0" />
                                             {item}
                                         </li>
                                     ))}
                                 </ul>
-                            </div>
-                            <div className="flex-1">
-                                <ScreenshotPlaceholder
+                            </Reveal>
+                            <Reveal className="flex-1">
+                                <ScreenshotFrame
                                     tall
                                     label="Dashboard — Fixtures view"
-                                    description="Show the main fixtures list page with match cards showing home/away teams, scores, status badges (upcoming/live/full-time), and the sidebar navigation with season switcher visible."
+                                    description="Main fixtures list with match cards showing home/away teams, scores, status badges (Upcoming / Live / Full Time), and the sidebar with season switcher."
                                 />
-                            </div>
+                            </Reveal>
                         </div>
                     </div>
                 </section>
 
-                {/* ── Embed section ───────────────────────────────────────── */}
+                {/* ══════════════════════════════════════════════════════════
+                    EMBED — code + widget preview
+                ══════════════════════════════════════════════════════════ */}
                 <section className="border-b border-border bg-card">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
                         <div className="flex flex-col lg:flex-row-reverse lg:items-start gap-12">
-                            <div className="lg:w-80 shrink-0">
-                                <SectionLabel>Embeddable widgets</SectionLabel>
-                                <h2 className="font-mono font-bold text-2xl text-foreground mb-4">
+                            <Reveal direction="left" className="lg:w-72 shrink-0">
+                                <RedLabel>Embeddable widgets</RedLabel>
+                                <h2 className="font-mono font-bold text-2xl text-foreground mb-4 leading-tight">
                                     Your existing website, upgraded.
                                 </h2>
-                                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                                    Already have a Wix, Squarespace, or WordPress site for your club? Don&apos;t rebuild it. Just drop in one line of code and your live fixtures and standings appear automatically.
+                                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                                    Already have a Wix, Squarespace, or WordPress site? Don&apos;t rebuild it. One line of code and your live fixtures appear automatically.
                                 </p>
-                                <p className="text-sm text-muted-foreground leading-relaxed">
-                                    No API keys. No plugin. Just copy, paste, done.
+                                <p className="text-sm text-muted-foreground">
+                                    No API keys. No plugin. No technical knowledge required.
                                 </p>
-                            </div>
-                            <div className="flex-1 space-y-4">
-                                {/* Code snippet */}
-                                <div className="rounded-lg border border-border bg-background overflow-hidden">
-                                    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-muted/50">
-                                        <div className="flex gap-1.5">
-                                            <span className="size-2.5 rounded-full bg-border" />
-                                            <span className="size-2.5 rounded-full bg-border" />
-                                            <span className="size-2.5 rounded-full bg-border" />
-                                        </div>
-                                        <span className="font-mono text-[0.6875rem] text-muted-foreground ml-1">
-                                            embed.html
-                                        </span>
+                            </Reveal>
+                            <Reveal className="flex-1 space-y-4">
+                                {/* Code block */}
+                                <div className="rounded-xl border border-border bg-background overflow-hidden">
+                                    <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-muted/40">
+                                        <span className="size-2.5 rounded-full bg-[#ff5f57]" />
+                                        <span className="size-2.5 rounded-full bg-[#febc2e]" />
+                                        <span className="size-2.5 rounded-full bg-[#28c840]" />
+                                        <span className="font-mono text-[0.6rem] text-muted-foreground ml-2">embed.html</span>
                                     </div>
-                                    <pre className="px-5 py-4 text-[0.75rem] leading-relaxed overflow-x-auto">
-                                        <code>
-                                            <span className="text-muted-foreground">{`<!-- Paste anywhere on your club site -->`}</span>
-                                            {"\n"}
-                                            <span className="text-primary">{`<iframe`}</span>
-                                            {"\n  "}
-                                            <span className="text-foreground">{`src`}</span>
-                                            <span className="text-muted-foreground">{`="`}</span>
-                                            <span className="text-foreground">{`https://yourclub.fixtureflow.app/embed/fixtures`}</span>
-                                            <span className="text-muted-foreground">{`"`}</span>
-                                            {"\n  "}
-                                            <span className="text-foreground">{`width`}</span>
-                                            <span className="text-muted-foreground">{`="`}</span>
-                                            <span className="text-foreground">100%</span>
-                                            <span className="text-muted-foreground">{`"`}</span>
-                                            {"\n  "}
-                                            <span className="text-foreground">{`height`}</span>
-                                            <span className="text-muted-foreground">{`="`}</span>
-                                            <span className="text-foreground">500</span>
-                                            <span className="text-muted-foreground">{`"`}</span>
-                                            {"\n  "}
-                                            <span className="text-foreground">{`frameborder`}</span>
-                                            <span className="text-muted-foreground">{`="`}</span>
-                                            <span className="text-foreground">0</span>
-                                            <span className="text-muted-foreground">{`"`}</span>
-                                            {"\n"}
-                                            <span className="text-primary">{`/>`}</span>
-                                        </code>
+                                    <pre className="px-5 py-5 font-mono text-[0.75rem] leading-6 overflow-x-auto">
+                                        <span className="text-muted-foreground">{`<!-- Paste anywhere on your club site -->`}</span>{"\n"}
+                                        <span style={{ color: RED }}>{`<iframe`}</span>{"\n"}
+                                        {"  "}<span className="text-foreground">src</span><span className="text-muted-foreground">{"=\""}</span><span className="text-foreground">https://yourclub.fixtureflow.app/embed/fixtures</span><span className="text-muted-foreground">{"\""}</span>{"\n"}
+                                        {"  "}<span className="text-foreground">width</span><span className="text-muted-foreground">{"=\""}</span><span className="text-foreground">100%</span><span className="text-muted-foreground">{"\""}</span>{"\n"}
+                                        {"  "}<span className="text-foreground">height</span><span className="text-muted-foreground">{"=\""}</span><span className="text-foreground">480</span><span className="text-muted-foreground">{"\""}</span>{"\n"}
+                                        {"  "}<span className="text-foreground">frameborder</span><span className="text-muted-foreground">{"=\""}</span><span className="text-foreground">0</span><span className="text-muted-foreground">{"\""}</span>{"\n"}
+                                        <span style={{ color: RED }}>{"/>"}</span>
                                     </pre>
                                 </div>
-                                <ScreenshotPlaceholder
+                                <ScreenshotFrame
                                     label="Embedded fixtures widget"
-                                    description="Show the /embed/fixtures widget as it would appear embedded on a third-party website — compact fixture list with team names, dates, scores, and the FixtureFlow watermark at the bottom."
+                                    description="Compact fixture list widget on a third-party site — team names, dates, scores, and FixtureFlow watermark at the bottom."
                                 />
-                            </div>
+                            </Reveal>
                         </div>
                     </div>
                 </section>
 
-                {/* ── Public pages ────────────────────────────────────────── */}
+                {/* ══════════════════════════════════════════════════════════
+                    PUBLIC PAGES
+                ══════════════════════════════════════════════════════════ */}
                 <section className="border-b border-border">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
                         <div className="flex flex-col lg:flex-row lg:items-start gap-12">
-                            <div className="lg:w-80 shrink-0">
-                                <SectionLabel>Public pages</SectionLabel>
-                                <h2 className="font-mono font-bold text-2xl text-foreground mb-4">
+                            <Reveal direction="left" className="lg:w-72 shrink-0">
+                                <RedLabel>Public pages</RedLabel>
+                                <h2 className="font-mono font-bold text-2xl text-foreground mb-4 leading-tight">
                                     A site for your supporters, out of the box.
                                 </h2>
-                                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
-                                    Every FixtureFlow club gets a clean, public-facing site. Supporters can check fixtures, results, standings, and brackets — no account, no app, no friction.
+                                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                                    Every FixtureFlow club gets a clean, public-facing site. Supporters check fixtures, results, standings, and brackets — no account, no app, no friction.
                                 </p>
-                                <p className="text-sm text-muted-foreground leading-relaxed">
-                                    Works on every device. Looks good in light and dark mode. Always up to date.
+                                <p className="text-sm text-muted-foreground">
+                                    Works on every device. Light and dark mode. Always up to date.
                                 </p>
-                            </div>
-                            <div className="flex-1">
-                                <ScreenshotPlaceholder
+                            </Reveal>
+                            <Reveal className="flex-1">
+                                <ScreenshotFrame
                                     tall
-                                    label="Public fixtures & standings page"
-                                    description="Show the public-facing /fixtures page — a clean list of upcoming and past matches with scores, plus a link to the standings table. Club logo and name visible in the top nav. Mobile-friendly layout."
+                                    label="Public fixtures & standings"
+                                    description="Public /fixtures page — clean list of upcoming and past matches with scores, plus a standings table link. Club logo in the top nav. Mobile-friendly."
                                 />
-                            </div>
+                            </Reveal>
                         </div>
                     </div>
                 </section>
 
-                {/* ── Comparison ──────────────────────────────────────────── */}
-                <section className="border-b border-border bg-card">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
-                        <SectionLabel>How we compare</SectionLabel>
-                        <h2 className="font-mono font-bold text-2xl sm:text-3xl text-foreground mb-10">
-                            Built for clubs that deserve better.
-                        </h2>
-
-                        <div className="overflow-x-auto">
-                            <table className="w-full min-w-[480px]">
-                                <thead>
-                                    <tr className="border-b border-border">
-                                        <th className="text-left py-3 pr-6 font-mono text-xs uppercase tracking-widest text-muted-foreground font-normal w-1/2">
-                                            Feature
-                                        </th>
-                                        <th className="text-center py-3 px-4 font-mono text-xs uppercase tracking-widest text-primary font-semibold">
-                                            FixtureFlow
-                                        </th>
-                                        <th className="text-center py-3 px-4 font-mono text-xs uppercase tracking-widest text-muted-foreground font-normal">
-                                            Pitchero
-                                        </th>
-                                        <th className="text-center py-3 px-4 font-mono text-xs uppercase tracking-widest text-muted-foreground font-normal">
-                                            FullTime FA
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {comparison.map((row, i) => (
-                                        <tr
-                                            key={row.feature}
-                                            className={`border-b border-border last:border-0 ${i % 2 === 0 ? "" : "bg-muted/30"}`}
-                                        >
-                                            <td className="py-3.5 pr-6 text-sm text-foreground">{row.feature}</td>
-                                            <td className="py-3.5 px-4 text-center">
-                                                <Tick ok={row.ff} />
-                                            </td>
-                                            <td className="py-3.5 px-4 text-center">
-                                                <Tick ok={row.pitchero} />
-                                            </td>
-                                            <td className="py-3.5 px-4 text-center">
-                                                <Tick ok={row.fulltime} />
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-5">
-                            * Comparison based on publicly available feature information as of 2025.
-                        </p>
-                    </div>
-                </section>
-
-                {/* ── Final CTA ───────────────────────────────────────────── */}
-                <section id="early-access" className="border-b border-border">
-                    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
-                        <div className="max-w-lg mx-auto text-center">
-                            <SectionLabel>Early access</SectionLabel>
-                            <h2 className="font-mono font-bold text-3xl sm:text-4xl text-foreground mb-4">
-                                Ready to simplify your club?
+                {/* ══════════════════════════════════════════════════════════
+                    COMPARISON — highlighted FixtureFlow column
+                ══════════════════════════════════════════════════════════ */}
+                <section className="border-b border-border bg-card relative overflow-hidden">
+                    <span
+                        className="absolute right-4 top-4 font-mono font-bold leading-none select-none pointer-events-none"
+                        style={{ fontSize: "clamp(5rem, 16vw, 14rem)", color: "var(--border)", opacity: 0.8 }}
+                        aria-hidden
+                    >
+                        03
+                    </span>
+                    <div className="relative max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+                        <Reveal>
+                            <RedLabel>How we compare</RedLabel>
+                            <h2 className="font-mono font-bold text-2xl sm:text-[2rem] text-foreground mb-10 leading-tight">
+                                Built for clubs that deserve better.
                             </h2>
-                            <p className="text-sm text-muted-foreground leading-relaxed mb-10">
-                                We&apos;re onboarding clubs one by one to make sure the experience is right.
-                                Drop your email and we&apos;ll reach out when we&apos;re ready for you.
+                        </Reveal>
+                        <Reveal delay={80}>
+                            <div className="overflow-x-auto">
+                                <table className="w-full min-w-[500px]">
+                                    <colgroup>
+                                        <col className="w-1/2" />
+                                        <col className="w-[18%]" />
+                                        <col className="w-[16%]" />
+                                        <col className="w-[16%]" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th className="text-left pb-4 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground font-normal" />
+                                            {/* FixtureFlow — highlighted header */}
+                                            <th className="pb-0 px-3 text-center">
+                                                <div
+                                                    className="rounded-t-xl px-3 py-3 font-mono text-[0.65rem] uppercase tracking-[0.14em] font-semibold"
+                                                    style={{ background: RED, color: "#fff" }}
+                                                >
+                                                    FixtureFlow
+                                                </div>
+                                            </th>
+                                            <th className="pb-4 px-4 text-center font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground font-normal">
+                                                Pitchero
+                                            </th>
+                                            <th className="pb-4 px-4 text-center font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground font-normal">
+                                                FullTime FA
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {comparison.map((row, i) => (
+                                            <tr
+                                                key={row.feature}
+                                                className="border-t border-border"
+                                            >
+                                                <td className="py-3.5 pr-4 text-sm text-foreground">{row.feature}</td>
+                                                {/* FixtureFlow cell — highlighted */}
+                                                <td
+                                                    className="py-3.5 px-3 text-center border-x"
+                                                    style={{
+                                                        background: `${RED}09`,
+                                                        borderColor: `${RED}30`,
+                                                        borderBottomLeftRadius: i === comparison.length - 1 ? "0.75rem" : undefined,
+                                                        borderBottomRightRadius: i === comparison.length - 1 ? "0.75rem" : undefined,
+                                                    }}
+                                                >
+                                                    <Tick ok={row.ff} />
+                                                </td>
+                                                <td className="py-3.5 px-4 text-center"><Tick ok={row.pitchero} /></td>
+                                                <td className="py-3.5 px-4 text-center"><Tick ok={row.fulltime} /></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-5">
+                                * Based on publicly available feature information, 2025.
                             </p>
-                            <InterestForm />
+                        </Reveal>
+                    </div>
+                </section>
+
+                {/* ══════════════════════════════════════════════════════════
+                    CTA — forced dark, centered, impactful
+                ══════════════════════════════════════════════════════════ */}
+                <section
+                    id="early-access"
+                    className="relative overflow-hidden"
+                    style={{ background: DARK_BG, color: DARK_FG }}
+                >
+                    {/* Glow */}
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            backgroundImage: `radial-gradient(ellipse 60% 70% at 50% 100%, rgba(232,68,34,0.14), transparent)`,
+                        }}
+                    />
+                    {/* Dot grid */}
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)",
+                            backgroundSize: "28px 28px",
+                        }}
+                    />
+                    <div className="relative max-w-5xl mx-auto px-5 sm:px-8 py-20 sm:py-32">
+                        <div className="max-w-lg mx-auto text-center">
+                            <Reveal>
+                                <div
+                                    className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-8 border"
+                                    style={{ borderColor: `${RED}44`, background: `${RED}14` }}
+                                >
+                                    <span className="size-1.5 rounded-full shrink-0" style={{ background: RED }} />
+                                    <span className="font-mono text-[0.6375rem] uppercase tracking-[0.18em]" style={{ color: RED }}>
+                                        Limited early access
+                                    </span>
+                                </div>
+                                <h2
+                                    className="font-mono font-bold text-3xl sm:text-4xl lg:text-5xl mb-5 leading-tight"
+                                    style={{ color: DARK_FG }}
+                                >
+                                    Ready to simplify your club?
+                                </h2>
+                                <p className="text-sm leading-relaxed mb-10" style={{ color: DARK_MUTED }}>
+                                    We&apos;re onboarding clubs one by one to get the experience right.
+                                    Leave your details and we&apos;ll be in touch.
+                                </p>
+                            </Reveal>
+                            <Reveal delay={100}>
+                                <InterestForm />
+                            </Reveal>
                         </div>
                     </div>
                 </section>
             </main>
 
             {/* ── Footer ──────────────────────────────────────────────────── */}
-            <footer className="border-t border-border">
-                <div className="max-w-5xl mx-auto px-5 sm:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <Logo width={100} />
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-                        <Link
-                            href="/fixtures"
-                            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
+            <footer
+                className="border-t"
+                style={{ borderColor: DARK_BORDER, background: DARK_BG }}
+            >
+                <div className="max-w-5xl mx-auto px-5 sm:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+                    <Image src="/logo-inverse.svg" alt="FixtureFlow" width={100} height={22} />
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                        <Link href="/fixtures" className="text-xs transition-colors hover:opacity-80" style={{ color: DARK_MUTED }}>
                             Public site
                         </Link>
-                        <Link
-                            href="/dashboard"
-                            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
+                        <Link href="/dashboard" className="text-xs transition-colors hover:opacity-80" style={{ color: DARK_MUTED }}>
                             Admin sign in
                         </Link>
-                        <p className="text-xs text-muted-foreground">
+                        <span className="text-xs" style={{ color: `${DARK_MUTED}80` }}>
                             © {new Date().getFullYear()} FixtureFlow
-                        </p>
+                        </span>
                     </div>
                 </div>
             </footer>
