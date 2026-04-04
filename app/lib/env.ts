@@ -20,6 +20,7 @@ const schema = z.object({
     // Optional until Phase 6 — empty string is allowed while not configured
     RESEND_API_KEY: z.string().default(""),
     RESEND_FROM_EMAIL: z.string().email().default("no-reply@fixtureflow.app"),
+    NOTIFY_EMAIL: z.string().email().default("no-reply@fixtureflow.app"),
 
     // ─── Seed ─────────────────────────────────────────────────
     SEED_ADMIN_EMAIL: z.string().email().default("admin@fixtureflow.app"),

@@ -42,8 +42,7 @@ export async function submitInterestAction(
         // Notify you
         await resend.emails.send({
             from: env.RESEND_FROM_EMAIL,
-            // ⬇ Update this to your personal email to receive notifications
-            to: env.RESEND_FROM_EMAIL,
+            to: env.NOTIFY_EMAIL,
             subject: `New FixtureFlow interest: ${name} (${email})`,
             html: `
                 <p><strong>Name:</strong> ${name}</p>
