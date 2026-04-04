@@ -2,8 +2,14 @@
 
 import { usePathname } from "next/navigation"
 import { ThemeToggle } from "./theme-toggle"
-import { Search, ExternalLink } from "lucide-react"
+import { Search, ChevronDown, Calendar, BarChart2, Trophy } from "lucide-react"
 import Link from "next/link"
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 
 const routeMeta: { pattern: RegExp; title: string; subtitle: string }[] = [
     { pattern: /^\/dashboard\/age-groups/, title: "Age Groups", subtitle: "Manage age group categories" },
@@ -15,6 +21,7 @@ const routeMeta: { pattern: RegExp; title: string; subtitle: string }[] = [
     { pattern: /^\/dashboard\/fixtures\/[^/]+/, title: "Match Detail", subtitle: "Score and match info" },
     { pattern: /^\/dashboard\/fixtures/, title: "Fixtures", subtitle: "Schedule and results" },
     { pattern: /^\/dashboard\/users/, title: "Users", subtitle: "Admin accounts" },
+    { pattern: /^\/dashboard\/settings/, title: "Settings", subtitle: "Club configuration" },
     { pattern: /^\/dashboard$/, title: "Dashboard", subtitle: "Overview of your club" },
 ]
 
@@ -44,14 +51,27 @@ export function Topbar() {
 
             {/* Right: FixtureFlow brand wordmark + view button + theme toggle */}
             <div className="ml-auto flex items-center gap-4">
-                {/* View public site */}
-                <Link
-                    href="/"
-                    className="hidden xl:flex items-center gap-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.05em] text-foreground hover:text-primary transition-colors"
-                >
-                    View your club
-                    <ExternalLink size={11} />
-                </Link>
+                {/* Public pages dropdown */}
+                <DropdownMenu>
+                    <DropdownMenuTrigger className="hidden xl:flex items-center gap-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.05em] text-foreground hover:text-primary transition-colors outline-none">
+                        View your club
+                        <ChevronDown size={11} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" sideOffset={8}>
+                        <DropdownMenuItem render={<Link href="/fixtures" />}>
+                            <Calendar size={14} />
+                            Fixtures
+                        </DropdownMenuItem>
+                        <DropdownMenuItem render={<Link href="/standings" />}>
+                            <BarChart2 size={14} />
+                            Standings
+                        </DropdownMenuItem>
+                        <DropdownMenuItem render={<Link href="/bracket" />}>
+                            <Trophy size={14} />
+                            Bracket
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
                 <ThemeToggle />
             </div>

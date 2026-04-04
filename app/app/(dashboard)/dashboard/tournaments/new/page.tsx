@@ -2,9 +2,11 @@ import { db } from "@/lib/db"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { NewTournamentForm } from "./_components/new-tournament-form"
+import { getSeasonLabel } from "@/lib/season"
 
 export default async function NewTournamentPage() {
     const ageGroups = await db.ageGroup.findMany({ orderBy: { name: "asc" } })
+    const currentSeason = getSeasonLabel()
 
     return (
         <div className="max-w-lg">
@@ -17,7 +19,7 @@ export default async function NewTournamentPage() {
             </Link>
 
             <p className="font-sans text-base font-light text-muted-foreground mb-8">Set up a new competition</p>
-            <NewTournamentForm ageGroups={ageGroups} />
+            <NewTournamentForm ageGroups={ageGroups} currentSeason={currentSeason} />
         </div>
     )
 }

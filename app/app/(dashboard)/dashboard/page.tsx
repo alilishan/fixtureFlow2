@@ -2,33 +2,35 @@ import { db } from "@/lib/db"
 import { Shield, Users, Trophy, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { MatchStatusBadge } from "@/components/dashboard/match-status-badge"
+import { getActiveSeason } from "@/lib/get-active-season"
 
 // ── Data fetching ────────────────────────────────────────────────
 
-async function getStats() {
+async function getStats(season: string) {
     const now = new Date()
+    const seasonFilter = { tournament: { season } }
     const [teams, players, upcoming, tournaments, live] = await Promise.all([
-        db.team.count(),
-        db.player.count(),
-        db.match.count({ where: { status: "SCHEDULED", scheduledAt: { gte: now } } }),
-        db.tournament.count(),
-        db.match.count({ where: { status: "LIVE" } }),
+        db.team.count({ where: { OR: [{ season }, { season: null }] } }),
+        db.player.count({ where: { team: { OR: [{ season }, { season: null }] } } }),
+        db.match.count({ where: { status: "SCHEDULED", scheduledAt: { gte: now }, ...seasonFilter } }),
+        db.tournament.count({ where: { season } }),
+        db.match.count({ where: { status: "LIVE", ...seasonFilter } }),
     ])
     return { teams, players, upcoming, tournaments, live }
 }
 
-async function getUpcomingMatches() {
+async function getUpcomingMatches(season: string) {
     return db.match.findMany({
-        where: { status: "SCHEDULED", scheduledAt: { not: null } },
+        where: { status: "SCHEDULED", scheduledAt: { not: null }, tournament: { season } },
         orderBy: { scheduledAt: "asc" },
         take: 6,
         include: { homeTeam: true, awayTeam: true, tournament: true },
     })
 }
 
-async function getSeasonRecord() {
+async function getSeasonRecord(season: string) {
     const finished = await db.match.findMany({
-        where: { status: "FINISHED", homeScore: { not: null }, awayScore: { not: null } },
+        where: { status: "FINISHED", homeScore: { not: null }, awayScore: { not: null }, tournament: { season } },
         select: { homeScore: true, awayScore: true },
     })
     const wins = finished.filter((m) => m.homeScore! > m.awayScore!).length
@@ -37,9 +39,9 @@ async function getSeasonRecord() {
     return { wins, draws, losses, total: finished.length }
 }
 
-async function getRecentResults() {
+async function getRecentResults(season: string) {
     return db.match.findMany({
-        where: { status: "FINISHED", homeScore: { not: null }, awayScore: { not: null } },
+        where: { status: "FINISHED", homeScore: { not: null }, awayScore: { not: null }, tournament: { season } },
         orderBy: { updatedAt: "desc" },
         take: 4,
         include: { homeTeam: true, awayTeam: true },
@@ -63,11 +65,12 @@ function formatMatchId(id: string) {
 // ── Page ─────────────────────────────────────────────────────────
 
 export default async function DashboardPage() {
+    const activeSeason = await getActiveSeason()
     const [stats, upcoming, record, results] = await Promise.all([
-        getStats(),
-        getUpcomingMatches(),
-        getSeasonRecord(),
-        getRecentResults(),
+        getStats(activeSeason),
+        getUpcomingMatches(activeSeason),
+        getSeasonRecord(activeSeason),
+        getRecentResults(activeSeason),
     ])
 
     // Donut percentages — show empty ring if no data

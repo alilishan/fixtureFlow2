@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ChevronLeft } from "lucide-react"
+import { ChevronLeft, UserCog } from "lucide-react"
 import { AddPlayerDialog, PlayerActions } from "./_components/player-dialogs"
 
 export default async function TeamDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -47,8 +47,12 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ id:
                 </div>
 
                 {team.players.length === 0 ? (
-                    <div className="border border-border py-12 text-center">
-                        <p className="text-muted-foreground text-sm">No players in squad yet.</p>
+                    <div className="py-20 flex flex-col items-center gap-4 text-center">
+                        <UserCog size={32} className="text-muted-foreground" />
+                        <p className="font-medium text-foreground">No players in squad yet</p>
+                        <p className="text-sm text-muted-foreground max-w-sm">
+                            Add players to build out the squad.
+                        </p>
                     </div>
                 ) : (
                     <div className="border border-border">

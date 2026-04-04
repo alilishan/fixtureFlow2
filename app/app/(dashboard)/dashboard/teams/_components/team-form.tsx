@@ -26,10 +26,12 @@ const inputCls =
 export function CreateTeamForm({
     ageGroups,
     coaches,
+    season,
     onSuccess,
 }: {
     ageGroups: AgeGroup[]
     coaches: Coach[]
+    season?: string
     onSuccess?: () => void
 }) {
     const formRef = useRef<HTMLFormElement>(null)
@@ -52,6 +54,7 @@ export function CreateTeamForm({
 
     return (
         <form ref={formRef} action={action} className="flex flex-col gap-4">
+            {season && <input type="hidden" name="season" value={season} />}
             <Field label="Team Name *">
                 <input name="name" className={inputCls} placeholder="e.g. Eagles FC" />
             </Field>

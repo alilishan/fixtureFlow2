@@ -55,6 +55,7 @@ model AgeGroup {
 model Team {
   id          String           @id @default(cuid())
   name        String
+  season      String?
   ageGroupId  String
   ageGroup    AgeGroup         @relation(fields: [ageGroupId], references: [id])
   coach       User?            @relation("CoachTeam")
@@ -85,6 +86,7 @@ model Tournament {
   id         String           @id @default(cuid())
   name       String
   type       TournamentType
+  season     String?
   ageGroupId String
   ageGroup   AgeGroup         @relation(fields: [ageGroupId], references: [id])
   teams      TournamentTeam[]

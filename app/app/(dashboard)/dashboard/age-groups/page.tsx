@@ -1,4 +1,5 @@
 import { db } from "@/lib/db"
+import { Users } from "lucide-react"
 import { CreateAgeGroupDialog } from "./_components/create-age-group-dialog"
 import { AgeGroupActions } from "./_components/age-group-actions"
 
@@ -20,9 +21,10 @@ export default async function AgeGroupsPage() {
             </div>
 
             {ageGroups.length === 0 ? (
-                <div className="border border-border py-16 text-center">
-                    <p className="text-muted-foreground text-sm">No age groups yet.</p>
-                    <p className="text-muted-foreground text-xs mt-1">
+                <div className="py-20 flex flex-col items-center gap-4 text-center">
+                    <Users size={32} className="text-muted-foreground" />
+                    <p className="font-medium text-foreground">No age groups yet</p>
+                    <p className="text-sm text-muted-foreground max-w-sm">
                         Create one to start adding teams.
                     </p>
                 </div>

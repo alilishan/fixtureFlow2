@@ -1,11 +1,15 @@
 import { db } from "@/lib/db"
 import Link from "next/link"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, Shield } from "lucide-react"
 import { CreateTeamDialog, TeamActions } from "./_components/team-dialogs"
+import { getActiveSeason } from "@/lib/get-active-season"
 
 export default async function TeamsPage() {
+    const activeSeason = await getActiveSeason()
+
     const [teams, ageGroups, coaches] = await Promise.all([
         db.team.findMany({
+            where: { OR: [{ season: activeSeason }, { season: null }] },
             orderBy: [{ ageGroup: { name: "asc" } }, { name: "asc" }],
             include: {
                 ageGroup: true,
@@ -28,13 +32,14 @@ export default async function TeamsPage() {
                         All registered teams
                     </p>
                 </div>
-                <CreateTeamDialog ageGroups={ageGroups} coaches={coaches} />
+                <CreateTeamDialog ageGroups={ageGroups} coaches={coaches} season={activeSeason} />
             </div>
 
             {teams.length === 0 ? (
-                <div className="border border-border py-16 text-center">
-                    <p className="text-muted-foreground text-sm">No teams yet.</p>
-                    <p className="text-muted-foreground text-xs mt-1">
+                <div className="py-20 flex flex-col items-center gap-4 text-center">
+                    <Shield size={32} className="text-muted-foreground" />
+                    <p className="font-medium text-foreground">No teams yet</p>
+                    <p className="text-sm text-muted-foreground max-w-sm">
                         Create an age group first, then add teams.
                     </p>
                 </div>

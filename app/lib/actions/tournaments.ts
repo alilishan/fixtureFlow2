@@ -10,6 +10,7 @@ const schema = z.object({
     name: z.string().min(1, "Name is required").max(100),
     type: z.enum(["LEAGUE", "CUP", "LEAGUE_CUP"]),
     ageGroupId: z.string().min(1, "Age group is required"),
+    season: z.string().max(20).optional(),
 })
 
 async function requireOrganiser() {
@@ -26,6 +27,7 @@ export async function createTournament(formData: FormData) {
         name: formData.get("name"),
         type: formData.get("type"),
         ageGroupId: formData.get("ageGroupId"),
+        season: formData.get("season") || undefined,
     })
     if (!parsed.success) return { error: parsed.error.issues[0].message }
 
@@ -41,6 +43,7 @@ export async function updateTournament(id: string, formData: FormData) {
         name: formData.get("name"),
         type: formData.get("type"),
         ageGroupId: formData.get("ageGroupId"),
+        season: formData.get("season") || undefined,
     })
     if (!parsed.success) return { error: parsed.error.issues[0].message }
 

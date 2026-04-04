@@ -17,10 +17,20 @@ import {
     Bell,
     BarChart2,
     Settings,
+    ChevronDown,
+    Check,
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { cn } from "@/lib/utils"
 import { clientEnv } from "@/lib/env.client"
+import { getSeasonLabel } from "@/lib/season"
+import { setActiveSeason } from "@/lib/actions/season"
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 
 function getInitials(name: string) {
     return name
@@ -31,16 +41,6 @@ function getInitials(name: string) {
         .toUpperCase()
 }
 
-/** Compute academic-year season label from current date */
-function getCurrentSeason() {
-    const now = new Date()
-    const month = now.getMonth() // 0 = Jan, 11 = Dec
-    const year = now.getFullYear()
-    if (month >= 7) {
-        return `${year}/${(year + 1).toString().slice(2)}`
-    }
-    return `${year - 1}/${year.toString().slice(2)}`
-}
 
 const navItems = [
     { href: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
@@ -95,12 +95,20 @@ function NavItem({
     )
 }
 
-function SidebarContent({ onNav }: { onNav?: () => void }) {
+function SidebarContent({
+    onNav,
+    seasons,
+    activeSeason,
+}: {
+    onNav?: () => void
+    seasons: string[]
+    activeSeason: string
+}) {
     const logoUrl = clientEnv.NEXT_PUBLIC_CLUB_LOGO_URL
     const clubName = clientEnv.NEXT_PUBLIC_CLUB_NAME
     const tagline = clientEnv.NEXT_PUBLIC_CLUB_TAGLINE
     const initials = getInitials(clubName)
-    const season = getCurrentSeason()
+    const [, startTransition] = useTransition()
 
     return (
         <div className="flex flex-col h-full">
@@ -143,22 +151,44 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
                 />
             </div>
 
-            {/* ── Season stat ────────────────────────────────────────
-                Like the prominent "Earning $12,560.55" in the reference.
-            ──────────────────────────────────────────────────────── */}
-            <div className="px-5 py-5 shrink-0">
-                <p className="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-muted-foreground mb-1.5">
-                    Current Season
-                </p>
-                <p className="font-mono text-[1.75rem] font-semibold text-foreground leading-none">
-                    {season}
-                </p>
-                {tagline && (
-                    <p className="text-[0.75rem] text-muted-foreground mt-1.5 leading-snug">
-                        {tagline}
-                    </p>
-                )}
-            </div>
+            {/* ── Season stat (click to switch) ─────────────────────── */}
+            <DropdownMenu>
+                <DropdownMenuTrigger nativeButton={false} render={<div className="px-5 py-5 shrink-0 cursor-pointer group select-none" />}>
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                            <p className="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                                Current Season
+                            </p>
+                            <ChevronDown
+                                size={11}
+                                className="text-muted-foreground group-hover:text-foreground transition-colors"
+                            />
+                        </div>
+                        <p className="font-mono text-[1.75rem] font-semibold text-foreground leading-none group-hover:text-primary transition-colors">
+                            {activeSeason}
+                        </p>
+                        {tagline && (
+                            <p className="text-[0.75rem] text-muted-foreground mt-1.5 leading-snug">
+                                {tagline}
+                            </p>
+                        )}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="right" align="start" sideOffset={8}>
+                    {seasons.map((s) => (
+                        <DropdownMenuItem
+                            key={s}
+                            onSelect={() =>
+                                startTransition(() => setActiveSeason(s))
+                            }
+                        >
+                            <Check
+                                size={13}
+                                className={s === activeSeason ? "opacity-100" : "opacity-0"}
+                            />
+                            {s}
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* ── Nav ───────────────────────────────────────────────── */}
             <nav className="flex-1 overflow-y-auto py-2">
@@ -200,14 +230,20 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
     )
 }
 
-export function Sidebar() {
+export function Sidebar({
+    seasons,
+    activeSeason,
+}: {
+    seasons: string[]
+    activeSeason: string
+}) {
     const [mobileOpen, setMobileOpen] = useState(false)
 
     return (
         <>
             {/* Desktop sidebar — 260px, full height */}
             <aside className="hidden lg:flex flex-col w-[260px] shrink-0 bg-background h-full overflow-hidden">
-                <SidebarContent />
+                <SidebarContent seasons={seasons} activeSeason={activeSeason} />
             </aside>
 
             {/* Mobile: fixed top strip */}
@@ -271,7 +307,11 @@ export function Sidebar() {
                             </button>
                         </div>
                         <div className="flex-1 overflow-hidden">
-                            <SidebarContent onNav={() => setMobileOpen(false)} />
+                            <SidebarContent
+                                onNav={() => setMobileOpen(false)}
+                                seasons={seasons}
+                                activeSeason={activeSeason}
+                            />
                         </div>
                     </aside>
                 </>

@@ -1,9 +1,13 @@
 import { db } from "@/lib/db"
 import Link from "next/link"
+import { Calendar } from "lucide-react"
 import { MatchStatusBadge } from "@/components/dashboard/match-status-badge"
+import { getActiveSeason } from "@/lib/get-active-season"
 
 export default async function FixturesPage() {
+    const activeSeason = await getActiveSeason()
     const matches = await db.match.findMany({
+        where: { tournament: { season: activeSeason } },
         orderBy: { scheduledAt: "asc" },
         include: {
             homeTeam: true,
@@ -78,9 +82,10 @@ export default async function FixturesPage() {
             </div>
 
             {matches.length === 0 ? (
-                <div className="border border-border py-16 text-center">
-                    <p className="text-muted-foreground text-sm">No fixtures yet.</p>
-                    <p className="text-muted-foreground text-xs mt-1">
+                <div className="py-20 flex flex-col items-center gap-4 text-center">
+                    <Calendar size={32} className="text-muted-foreground" />
+                    <p className="font-medium text-foreground">No fixtures yet</p>
+                    <p className="text-sm text-muted-foreground max-w-sm">
                         Schedule matches from a tournament page.
                     </p>
                 </div>

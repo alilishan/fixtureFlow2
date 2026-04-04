@@ -9,6 +9,7 @@ const schema = z.object({
     name: z.string().min(1, "Name is required").max(80),
     ageGroupId: z.string().min(1, "Age group is required"),
     coachId: z.string().optional().nullable(),
+    season: z.string().max(20).optional(),
 })
 
 async function requireOrganiser() {
@@ -25,6 +26,7 @@ export async function createTeam(formData: FormData) {
         name: formData.get("name"),
         ageGroupId: formData.get("ageGroupId"),
         coachId: formData.get("coachId") || null,
+        season: formData.get("season") || undefined,
     })
     if (!parsed.success) return { error: parsed.error.issues[0].message }
 

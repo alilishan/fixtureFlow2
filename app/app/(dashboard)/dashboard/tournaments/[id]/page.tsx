@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ChevronLeft } from "lucide-react"
+import { ChevronLeft, Calendar } from "lucide-react"
 import { TournamentTeamPanel } from "./_components/tournament-team-panel"
 import { ScheduleMatchDialog } from "./_components/schedule-match-dialog"
 import { MatchStatusBadge } from "@/components/dashboard/match-status-badge"
@@ -70,8 +70,12 @@ export default async function TournamentDetailPage({
                     </div>
 
                     {tournament.matches.length === 0 ? (
-                        <div className="border border-border py-10 text-center">
-                            <p className="text-sm text-muted-foreground">No fixtures yet.</p>
+                        <div className="py-16 flex flex-col items-center gap-4 text-center">
+                            <Calendar size={32} className="text-muted-foreground" />
+                            <p className="font-medium text-foreground">No fixtures yet</p>
+                            <p className="text-sm text-muted-foreground max-w-sm">
+                                Schedule matches using the button above.
+                            </p>
                         </div>
                     ) : (
                         <div className="flex flex-col">

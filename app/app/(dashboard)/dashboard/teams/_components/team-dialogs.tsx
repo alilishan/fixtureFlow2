@@ -15,9 +15,11 @@ type Team = { id: string; name: string; ageGroupId: string; coachOfTeamId?: stri
 export function CreateTeamDialog({
     ageGroups,
     coaches,
+    season,
 }: {
     ageGroups: AgeGroup[]
     coaches: Coach[]
+    season?: string
 }) {
     const [open, setOpen] = useState(false)
     return (
@@ -30,6 +32,7 @@ export function CreateTeamDialog({
                 <CreateTeamForm
                     ageGroups={ageGroups}
                     coaches={coaches}
+                    season={season}
                     onSuccess={() => setOpen(false)}
                 />
             </Dialog>

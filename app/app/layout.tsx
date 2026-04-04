@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             className={`${anton.variable} ${inter.variable} ${jetbrainsMono.variable}`}
             suppressHydrationWarning
         >
-            <body className="min-h-screen bg-background text-foreground antialiased">
+            <body className="min-h-screen bg-background text-foreground antialiased" suppressHydrationWarning>
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"

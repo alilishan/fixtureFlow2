@@ -19,7 +19,13 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     )
 }
 
-export function NewTournamentForm({ ageGroups }: { ageGroups: { id: string; name: string }[] }) {
+export function NewTournamentForm({
+    ageGroups,
+    currentSeason,
+}: {
+    ageGroups: { id: string; name: string }[]
+    currentSeason: string
+}) {
     const [error, setError] = useState<string | null>(null)
     const [pending, startTransition] = useTransition()
 
@@ -34,6 +40,15 @@ export function NewTournamentForm({ ageGroups }: { ageGroups: { id: string; name
 
     return (
         <form action={action} className="flex flex-col gap-5">
+            <Field label="Season">
+                <input
+                    name="season"
+                    className={inputCls}
+                    defaultValue={currentSeason}
+                    placeholder="e.g. 2025/26"
+                />
+            </Field>
+
             <Field label="Name *">
                 <input name="name" className={inputCls} placeholder="e.g. Spring League 2025" />
             </Field>
