@@ -7,6 +7,7 @@ import {
     Calendar, BarChart2, Trophy, Layers, Globe, Users,
     Check, X, Zap, ArrowRight, ChevronRight,
 } from "lucide-react"
+import { ThemeToggle } from "@/components/dashboard/theme-toggle"
 
 export const generateMetadata = async () => {
     return {
@@ -14,6 +15,8 @@ export const generateMetadata = async () => {
         description: "FixtureFlow is the modern club management platform for football clubs who want beautiful fixtures, live results, and automatic standings — without the complexity or the cost.",
     }
 }
+
+const commitSha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "dev"
 
 // ─── Colours forced for the dark sections ────────────────────────────────────
 const DARK_BG   = "#0e0f14"
@@ -166,6 +169,7 @@ export default function MarketingPage() {
                         >
                             Get early access <ArrowRight size={11} />
                         </a>
+                        <ThemeToggle />
                     </div>
                 </div>
             </nav>
@@ -652,7 +656,7 @@ export default function MarketingPage() {
                             Admin sign in
                         </Link>
                         <span className="text-xs" style={{ color: `${DARK_MUTED}80` }}>
-                            © {new Date().getFullYear()} FixtureFlow
+                            © {new Date().getFullYear()} FixtureFlow · v{commitSha}
                         </span>
                     </div>
                 </div>
