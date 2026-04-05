@@ -8,6 +8,13 @@ import {
     Check, X, Zap, ArrowRight, ChevronRight,
 } from "lucide-react"
 
+export const generateMetadata = async () => {
+    return {
+        title: "FixtureFlow",
+        description: "FixtureFlow is the modern club management platform for football clubs who want beautiful fixtures, live results, and automatic standings — without the complexity or the cost.",
+    }
+}
+
 // ─── Colours forced for the dark sections ────────────────────────────────────
 const DARK_BG   = "#0e0f14"
 const DARK_CARD = "#16181f"
