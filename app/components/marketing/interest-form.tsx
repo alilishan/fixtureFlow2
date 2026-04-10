@@ -77,7 +77,7 @@ export function InterestForm({ variant = "default" }: { variant?: "default" | "c
     if (success) {
         return (
             <div className="flex items-center gap-2.5 text-sm text-foreground">
-                <CheckCircle size={16} className="text-primary shrink-0" />
+                <CheckCircle size={16} className="text-primary shrink-0 animate-scale-spring" />
                 <span>You&apos;re on the list — we&apos;ll be in touch.</span>
             </div>
         )

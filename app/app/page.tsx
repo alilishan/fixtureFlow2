@@ -104,16 +104,18 @@ function Tick({ ok, dark }: { ok: boolean; dark?: boolean }) {
 }
 
 function ScreenshotFrame({
-    label,
-    description,
-    tall,
+    lightSrc,
+    darkSrc,
+    alt,
+    urlBar,
 }: {
-    label: string
-    description: string
-    tall?: boolean
+    lightSrc: string
+    darkSrc: string
+    alt: string
+    urlBar: string
 }) {
     return (
-        <div className={`rounded-xl border border-border overflow-hidden shadow-float ${tall ? "min-h-[460px]" : "min-h-[320px]"} flex flex-col`}>
+        <div className="rounded-xl border border-border overflow-hidden shadow-float flex flex-col">
             {/* Browser chrome */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-card shrink-0">
                 <span className="size-2.5 rounded-full bg-[#ff5f57]" />
@@ -121,26 +123,13 @@ function ScreenshotFrame({
                 <span className="size-2.5 rounded-full bg-[#28c840]" />
                 <div className="flex-1 mx-4 h-6 bg-muted rounded-md flex items-center px-3">
                     <span className="font-mono text-[0.6rem] text-muted-foreground">
-                        app.fixtureflow.app/dashboard
+                        {urlBar}
                     </span>
                 </div>
             </div>
-            {/* Content area */}
-            <div
-                className="flex-1 flex items-center justify-center bg-muted/40 px-6 py-8"
-                style={{
-                    backgroundImage:
-                        "repeating-linear-gradient(0deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px)",
-                }}
-            >
-                <div className="bg-card border border-border rounded-lg px-5 py-4 max-w-xs text-center">
-                    <span className="font-mono text-[0.625rem] uppercase tracking-[0.15em] text-primary block mb-2">
-                        Screenshot placeholder
-                    </span>
-                    <p className="font-mono font-semibold text-sm text-foreground mb-1.5">{label}</p>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
-                </div>
-            </div>
+            {/* Screenshot */}
+            <Image src={lightSrc} alt={alt} width={1280} height={800} className="w-full h-auto dark:hidden" />
+            <Image src={darkSrc} alt={alt} width={1280} height={800} className="w-full h-auto hidden dark:block" />
         </div>
     )
 }
@@ -153,7 +142,7 @@ export default function MarketingPage() {
 
             {/* ── Sticky nav ──────────────────────────────────────────────── */}
             <nav
-                className="sticky top-0 z-30 backdrop-blur-md border-b"
+                className="sticky top-0 z-30 backdrop-blur-md border-b animate-nav-slide"
                 style={{ background: "color-mix(in srgb, var(--background) 85%, transparent)", borderColor: "var(--border)" }}
             >
                 <div className="max-w-5xl mx-auto px-5 sm:px-8 h-14 flex items-center justify-between">
@@ -220,7 +209,7 @@ export default function MarketingPage() {
                             className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-8 border"
                             style={{ borderColor: `${RED}44`, background: `${RED}14` }}
                         >
-                            <span className="size-1.5 rounded-full shrink-0" style={{ background: RED }} />
+                            <span className="size-1.5 rounded-full shrink-0 animate-pulse" style={{ background: RED }} />
                             <span className="font-mono text-[0.6375rem] uppercase tracking-[0.18em]" style={{ color: RED }}>
                                 Early access — now open
                             </span>
@@ -254,14 +243,15 @@ export default function MarketingPage() {
                                 "Embeddable widgets",
                                 "Knockout brackets",
                                 "Public pages",
-                            ].map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="font-mono text-[0.6875rem] uppercase tracking-wider px-3 py-1.5 rounded-full border"
-                                    style={{ color: DARK_MUTED, borderColor: DARK_BORDER }}
-                                >
-                                    {tag}
-                                </span>
+                            ].map((tag, i) => (
+                                <Reveal key={tag} delay={300 + i * 60}>
+                                    <span
+                                        className="font-mono text-[0.6875rem] uppercase tracking-wider px-3 py-1.5 rounded-full border"
+                                        style={{ color: DARK_MUTED, borderColor: DARK_BORDER }}
+                                    >
+                                        {tag}
+                                    </span>
+                                </Reveal>
                             ))}
                         </div>
                     </div>
@@ -368,7 +358,7 @@ export default function MarketingPage() {
                                                 className="size-9 rounded-lg flex items-center justify-center mb-5 transition-colors group-hover:bg-primary/15"
                                                 style={{ background: `${RED}18` }}
                                             >
-                                                <Icon size={16} style={{ color: RED }} />
+                                                <Icon size={16} style={{ color: RED }} className="transition-transform duration-200 group-hover:scale-125" />
                                             </div>
                                             <h3 className="font-mono font-semibold text-sm text-foreground mb-2">
                                                 {f.title}
@@ -422,11 +412,18 @@ export default function MarketingPage() {
                                 </ul>
                             </Reveal>
                             <Reveal className="flex-1">
-                                <ScreenshotFrame
-                                    tall
-                                    label="Dashboard — Fixtures view"
-                                    description="Main fixtures list with match cards showing home/away teams, scores, status badges (Upcoming / Live / Full Time), and the sidebar with season switcher."
-                                />
+                                <div className="relative pb-10">
+                                    <ScreenshotFrame
+                                        lightSrc="/screenshots/dashboard-light.png"
+                                        darkSrc="/screenshots/dashboard-dark.png"
+                                        alt="FixtureFlow admin dashboard showing fixtures, standings, and season stats"
+                                        urlBar="app.fixtureflow.app/dashboard"
+                                    />
+                                    <div className="absolute bottom-4 -right-3 border border-border rounded-lg px-4 py-3 w-56 bg-card/90 backdrop-blur-sm shadow-lg">
+                                        <p className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-primary mb-1">Admin overview</p>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">Season stats, upcoming schedule, and live match status — everything your admins need without digging through menus.</p>
+                                    </div>
+                                </div>
                             </Reveal>
                         </div>
                     </div>
@@ -469,10 +466,18 @@ export default function MarketingPage() {
                                         <span style={{ color: RED }}>{"/>"}</span>
                                     </pre>
                                 </div>
-                                <ScreenshotFrame
-                                    label="Embedded fixtures widget"
-                                    description="Compact fixture list widget on a third-party site — team names, dates, scores, and FixtureFlow watermark at the bottom."
-                                />
+                                <div className="relative pb-10">
+                                    <ScreenshotFrame
+                                        lightSrc="/screenshots/public-fixtures-light.png"
+                                        darkSrc="/screenshots/public-fixtures-dark.png"
+                                        alt="FixtureFlow embedded fixtures widget showing live matches and results"
+                                        urlBar="yourclub.fixtureflow.app/fixtures"
+                                    />
+                                    <div className="absolute bottom-4 -right-3 border border-border rounded-lg px-4 py-3 w-56 bg-card/90 backdrop-blur-sm shadow-lg">
+                                        <p className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-primary mb-1">What supporters see</p>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">Live match badges, tournament filters, and scores in real time — exactly what gets embedded on your existing club site.</p>
+                                    </div>
+                                </div>
                             </Reveal>
                         </div>
                     </div>
@@ -497,11 +502,18 @@ export default function MarketingPage() {
                                 </p>
                             </Reveal>
                             <Reveal className="flex-1">
-                                <ScreenshotFrame
-                                    tall
-                                    label="Public fixtures & standings"
-                                    description="Public /fixtures page — clean list of upcoming and past matches with scores, plus a standings table link. Club logo in the top nav. Mobile-friendly."
-                                />
+                                <div className="relative pb-10">
+                                    <ScreenshotFrame
+                                        lightSrc="/screenshots/public-standings-light.png"
+                                        darkSrc="/screenshots/public-standings-dark.png"
+                                        alt="FixtureFlow public standings page showing league table with team rankings"
+                                        urlBar="yourclub.fixtureflow.app/standings"
+                                    />
+                                    <div className="absolute bottom-4 -right-3 border border-border rounded-lg px-4 py-3 w-56 bg-card/90 backdrop-blur-sm shadow-lg">
+                                        <p className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-primary mb-1">League table</p>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">P, W, D, L, GD, Pts, and form — recalculated instantly the moment a score is entered. No manual updates.</p>
+                                    </div>
+                                </div>
                             </Reveal>
                         </div>
                     </div>
@@ -617,7 +629,7 @@ export default function MarketingPage() {
                                     className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-8 border"
                                     style={{ borderColor: `${RED}44`, background: `${RED}14` }}
                                 >
-                                    <span className="size-1.5 rounded-full shrink-0" style={{ background: RED }} />
+                                    <span className="size-1.5 rounded-full shrink-0 animate-pulse" style={{ background: RED }} />
                                     <span className="font-mono text-[0.6375rem] uppercase tracking-[0.18em]" style={{ color: RED }}>
                                         Limited early access
                                     </span>

@@ -197,6 +197,26 @@
     }
 
     /* ── Marketing animations ─────────────────────────────── */
+
+    /* Nav entrance — slides down from above on first load */
+    @keyframes nav-slide-down {
+        from { transform: translateY(-100%); opacity: 0; }
+        to   { transform: translateY(0);     opacity: 1; }
+    }
+    .animate-nav-slide {
+        animation: nav-slide-down 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Spring scale — for success / confirmation icons */
+    @keyframes scale-spring {
+        0%   { transform: scale(0);   opacity: 0; }
+        65%  { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(1);   opacity: 1; }
+    }
+    .animate-scale-spring {
+        animation: scale-spring 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
     @keyframes marquee-scroll {
         from { transform: translateX(0); }
         to   { transform: translateX(-50%); }
